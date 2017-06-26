@@ -5,7 +5,7 @@ export class MedicalRecordModel {
     medicalRecord:any;
     medicalRecordObserver:any;
 
-    constructor (public title:string, public items: any[]){
+    constructor (public items: any[]){
         this.items = items;
         this.medicalRecord = Observable.create(observer => { 
             this.medicalRecordObserver = observer;
@@ -30,23 +30,25 @@ export class MedicalRecordModel {
         this.medicalRecordObserver.next(true);
     }
 
-    renameItem(item,title):void {
+    
+
+    updateNote(item,note):void {
+        console.log ("Inside updateNote with:"+JSON.stringify(item));
+        console.log ("Change note to:"+note);
         let index = this.items.indexOf(item);
-        if (index >-1) {this.items[index].title = title;}
-        this.medicalRecordObserver.next(true);
-
+        if (index >-1) {
+            this.items[index].notes = note;
+            this.medicalRecordObserver.next(true);
+        }
+        else
+        {
+            console.log ("ITEM NOT FOUND");
+        }
+        
+        
     }
 
-    setTitle(title):void {
-        this.title = title;
-        this.medicalRecordObserver.next(true);
-    }
-
-    toggleItem(item):void {
-        item.checked = !item.checked;
-        this.medicalRecordObserver.next(true);
-    }
-
+    
     checklistUpdates(): Observable<any> 
     { 
         return this.medicalRecord;

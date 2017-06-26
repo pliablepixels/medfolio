@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>
-      {{category.title}}
+      {{selectedCategory.title}}
     </ion-title>
     <ion-buttons end>
 
@@ -14,20 +14,41 @@
 
 <ion-content>
 
-  <ion-item *ngIf="!category.items.length">
+  <ion-item *ngIf="!selectedCategory.record.items.length">
     No records. Tap the
     <ion-icon name="camera"></ion-icon> icon to add.
   </ion-item>
 
   <ion-row responsive-sm wrap>
-    <ion-col width-50 *ngFor="let item of category.items; let isEven=even">
+    <ion-col width-50 *ngFor="let item of selectedCategory.record.items; let isEven=even">
+
       <ion-card>
-        <img src="{{item.photo}}" />
-         <ion-card-content>
-          <p>{{item.title}}</p>
+        <ion-item>
+          <p>{{item.date}}</p>
+        </ion-item>
+        <img src="{{item.photo}}">
+        <ion-card-content>
+          <p>{{item.notes}}</p>
         </ion-card-content>
-        <ion-note>{{item.date}}</ion-note>
+        <ion-row>
+          <ion-col>
+            <button ion-button icon-left clear small (click)="socialShare(item)">
+                <ion-icon name="share"> Share</ion-icon>
+          </button>
+          </ion-col>
+          <ion-col>
+            
+            <ion-buttons end>
+            <button ion-button icon-left clear small (click)="updateNote(item)">
+                  <ion-icon name="create"> Notes</ion-icon>
+            </button>
+            </ion-buttons>
+            
+          </ion-col>
+        </ion-row>
       </ion-card>
+
+
     </ion-col>
   </ion-row>
 </ion-content>

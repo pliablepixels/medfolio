@@ -12,6 +12,7 @@ import { Camera } from '@ionic-native/camera';
 
 import { MyApp } from './app.component';
 import { DataProvider } from '../providers/data/data';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DataProvider } from '../providers/data/data';
     Transfer,
     Camera,
     FilePath,
+    SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
