@@ -13,42 +13,74 @@
 </ion-header>
 
 <ion-content>
-
   <ion-item *ngIf="!selectedCategory.record.items.length">
     No records. Tap the
     <ion-icon name="camera"></ion-icon> icon to add.
   </ion-item>
 
-  <ion-row responsive-sm wrap>
-    <ion-col width-50 *ngFor="let item of selectedCategory.record.items; let isEven=even">
+  <div *ngIf="selectedCategory.record.items.length">
+    <ion-segment [(ngModel)]="viewMode">
+      <ion-segment-button value="list">
+        List
+      </ion-segment-button>
+      <ion-segment-button value="cards">
+        Cards
+      </ion-segment-button>
+    </ion-segment>
 
-      <ion-card>
-        <ion-item>
-          <p>{{item.date}}</p>
-        </ion-item>
-        <img src="{{item.photo}}">
-        <ion-card-content>
-          <p>{{item.notes}}</p>
-        </ion-card-content>
-        <ion-row>
-          <ion-col>
-            <button ion-button icon-left clear small (click)="socialShare(item)">
+    <div [ngSwitch]="viewMode">
+
+      <div *ngSwitchCase="'list'">
+        <ion-list *ngFor="let item of selectedCategory.record.items">
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="{{item.photo}}" class="fit-thumbnail" />
+            </ion-thumbnail>
+
+            <p>{{item.notes}}</p>
+            <button ion-button clear item-end (click)="socialShare(item)">Share</button>
+
+            <button ion-button clear item-end (click)="updateNote(item)">Edit</button>
+          </ion-item>
+        </ion-list>
+
+
+      </div>
+      <div *ngSwitchCase="'cards'">
+        <ion-row wrap>
+          <ion-col width-50 *ngFor="let item of selectedCategory.record.items; let isEven=even">
+
+            <ion-card>
+              <ion-item>
+                <p>{{item.date}}</p>
+              </ion-item>
+              <img src="{{item.photo}}">
+              <ion-card-content>
+                <p>{{item.notes}}</p>
+              </ion-card-content>
+              <ion-row>
+                <ion-col>
+                  <button ion-button icon-left clear small (click)="socialShare(item)">
                 <ion-icon name="share"> Share</ion-icon>
           </button>
-          </ion-col>
-          <ion-col>
-            
-            <ion-buttons end>
-            <button ion-button icon-left clear small (click)="updateNote(item)">
+                </ion-col>
+                <ion-col>
+
+                  <ion-buttons end>
+                    <button ion-button icon-left clear small (click)="updateNote(item)">
                   <ion-icon name="create"> Notes</ion-icon>
             </button>
-            </ion-buttons>
-            
+                  </ion-buttons>
+
+                </ion-col>
+              </ion-row>
+            </ion-card>
+
+
           </ion-col>
         </ion-row>
-      </ion-card>
+      </div>
+    </div>
+  </div>
 
-
-    </ion-col>
-  </ion-row>
 </ion-content>

@@ -33,6 +33,7 @@ export class MedicalRecordPage {
 
   lastImage: string = null;
   loading: Loading;
+  viewMode:string;
 
   //photoTaken:false;
 
@@ -40,6 +41,7 @@ export class MedicalRecordPage {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
+    this.viewMode = 'cards';
   }
 
 
@@ -104,7 +106,7 @@ export class MedicalRecordPage {
       }
       
       console.log('Save to:' + correctPath + currentName);
-      this.selectedCategory.record.addItem({ notes: 'test', photo: correctPath + currentName });
+      this.selectedCategory.record.addItem({ notes: '', photo: correctPath + currentName });
 
     }, (err) => {
       this.presentToast('Error while selecting image.');
