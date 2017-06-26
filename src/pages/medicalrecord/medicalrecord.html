@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      {{category.title}}
+    </ion-title>
+    <ion-buttons end>
+
+      <button ion-button icon-only (click)="addItem()">
+        <ion-icon name="camera"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item *ngIf="!category.items.length">
+    No records. Tap the
+    <ion-icon name="camera"></ion-icon> icon to add.
+  </ion-item>
+
+  <ion-row responsive-sm wrap>
+    <ion-col width-50 *ngFor="let item of category.items; let isEven=even">
+      <ion-card>
+        <img src="{{item.photo}}" />
+         <ion-card-content>
+          <p>{{item.title}}</p>
+        </ion-card-content>
+        <ion-note>{{item.date}}</ion-note>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-content>

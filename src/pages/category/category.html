@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      Categories
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="addCategory()">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list nolines>
+    <ion-item-sliding *ngFor = "let category of categories">
+      <button ion-item (click)="viewCategory(category)">
+        <ion-icon name="folder-open" item-start></ion-icon>
+        {{category.title}}
+        <ion-note item-end>({{category.items.length}} items)</ion-note>
+      </button>
+
+      <ion-item-options>
+        <button ion-button icon-only color="light" (click)="renameChecklist(checklist)">
+          <ion-icon name="clipboard"></ion-icon>Edit
+        </button>
+
+        <button ion-button icon-only color="danger" (click)="removeChecklist(checklist)">
+          <ion-icon name="trash"></ion-icon>Delete
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+      
+
+
+

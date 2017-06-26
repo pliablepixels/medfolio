@@ -1,0 +1,14 @@
+page-medicalrecord {
+  /*fix for ios*/
+ 
+    ion-content {
+    //ion-content.content-ios {
+      ion-row[wrap] {
+        ion-col {
+          flex-basis: 50%;
+        }
+      }
+    }
+
+ 
+}
