@@ -4,11 +4,11 @@ import { IonicPage, NavParams, AlertController, NavController, ActionSheetContro
 
 //import { Camera, Crop } from 'ionic-native';
 //import { Camera, CameraOptions } from 'ionic-native';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
-import * as moment from 'moment';
+
 import { SocialSharing } from '@ionic-native/social-sharing';
 
 //import { Crop } from '@ionic-native/crop'
@@ -228,7 +228,7 @@ export class MedicalRecordPage {
 
 
   socialShare(item): void {
-    let subject = 'MedFed image';
+
     let options = {
       message: 'Record attached, image taken on ' +
       item.date + '\n\nNotes:\n' + item.notes,
