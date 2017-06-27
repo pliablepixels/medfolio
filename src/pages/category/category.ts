@@ -4,10 +4,10 @@ import { MedicalRecordModel } from '../../models/medicalrecord-model';
 import { DataProvider } from '../../providers/data/data';
 //import {IntroPage} from '../intro/intro';
 import { Keyboard } from '@ionic-native/keyboard';
-import { Storage } from '@ionic/storage';
 
 
-type Category ={title: string, records: MedicalRecordModel};
+
+type Category = { title: string, records: MedicalRecordModel };
 
 // page 177
 @IonicPage()
@@ -18,47 +18,69 @@ type Category ={title: string, records: MedicalRecordModel};
 export class CategoryPage {
 
 
-  categories:{title:string, record:MedicalRecordModel}[]=[] ;
+  categories: { title: string, record: MedicalRecordModel }[] = [];
 
-  constructor( public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, keyboard: Keyboard) {
-    console.log ("CategoryPage constructor");
+  constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard) {
+    console.log("CategoryPage constructor");
   }
 
   ionViewDidLoad() {
-    console.log ("Inside viewload in homepage");
+    console.log("Inside viewload in homepage");
 
-    if (this.categories.length == 0){
+    this.platform.ready().then(() => {
+      this.dataService.getData().then((categories) => {
+        let savedCategories: any = false;
+        if (typeof (categories) != "undefined") {
+          savedCategories = JSON.parse(categories);
+        }
 
+        if (savedCategories) {
+          console.log ("saved categories found");
+          savedCategories.forEach((savedCategory) => {
+            let newMedicalRecord = new MedicalRecordModel(savedCategory.items);
+            this.categories.push({ title: savedCategory.title, record: newMedicalRecord });
+            newMedicalRecord.checklistUpdates().subscribe(update => {
+              this.save();
+              console.log("observable of category called inside dataService load with " + update);
+            });
+          })
+          console.log (this.categories);
+        }
+        // no stored categories, so create dummies
+        else {
+          console.log ("No categories saved, creating...");
           var defaultCategories = ["X-Rays", "Medical reports", "Lab Results"];
           for (let label of defaultCategories) {
-              let newMedicalRecord = new MedicalRecordModel([]); 
-              this.categories.push({title:label, record:newMedicalRecord});
-              newMedicalRecord.checklistUpdates().subscribe(update => {
+            let newMedicalRecord = new MedicalRecordModel([]);
+            this.categories.push({ title: label, record: newMedicalRecord });
+            newMedicalRecord.checklistUpdates().subscribe(update => {
               this.save();
-              console.log ("observable of category called inside defaultCategories");
-          }); 
-          this.save();
-          }
-          
-    }
+              console.log("observable of category called inside defaultCategories with " + update);
+            });
 
-    this.platform.ready().then (() => {
-      if (!this.dataService.isIntroShown())
-      {
+          }
+
+        }
+
+        if (!this.dataService.isIntroShown()) {
           this.dataService.setIntroShown(true);
           this.navCtrl.setRoot("IntroPage");
-          console.log ("Showing Intro");
-      }
-      else
-      {
-         console.log ("Intro already shown");
-      }
-       
-       
-    });
+          console.log("Showing Intro");
+        }
+        else {
+          console.log("Intro already shown");
+        }
+
+      })
+    })
+
+
+
+
+
   }
   addCategory(): void {
-  
+
     let prompt = this.alertCtrl.create({
       title: 'New Category',
       message: 'Enter new category name:', inputs: [
@@ -70,15 +92,15 @@ export class CategoryPage {
       },
       {
         text: 'Save', handler: data => {
-          let newMedicalRecord = new MedicalRecordModel([]); 
-           this.categories.push({title:data.name, record:newMedicalRecord});
-          
+          let newMedicalRecord = new MedicalRecordModel([]);
+          this.categories.push({ title: data.name, record: newMedicalRecord });
+
           newMedicalRecord.checklistUpdates().subscribe(update => {
             this.save();
-            console.log ("checklist observable inside home.ts");
-          }); 
+            console.log(" observable called inside addCategory with " + update);
+          });
           this.save();
-          console.log ("saved inside addChecklist");
+          console.log("saved inside addChecklist");
         }
       }
       ]
@@ -103,7 +125,7 @@ export class CategoryPage {
             this.categories[i].title = data.name;
             this.save();
           }
-          console.log ("saved inside renameCategory");
+          console.log("saved inside renameCategory");
         }
       }
       ]
@@ -111,16 +133,18 @@ export class CategoryPage {
     prompt.present();
   }
   viewCategory(category): void {
-    console.log ("pushing category to nav");
-    this.navCtrl.push('MedicalRecordPage', {category:category});
+    console.log("pushing category to nav");
+    this.navCtrl.push('MedicalRecordPage', { category: category });
   }
   removeCategory(category): void {
     let i = this.categories.indexOf(category);
-    if (i > -1) {this.categories.splice (i,1);this.save();}
+    if (i > -1) { this.categories.splice(i, 1); this.save(); }
   }
 
   save(): void {
-    console.log ("inside save of category.ts");
+    //console.log ("inside save of category.ts");
+    this.keyboard.close();
+    this.dataService.save(this.categories);
   }
 
 }

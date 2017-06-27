@@ -44,6 +44,7 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     Camera,
     FilePath,
     SocialSharing,
+    Storage,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
