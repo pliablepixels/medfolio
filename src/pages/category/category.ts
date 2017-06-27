@@ -37,6 +37,7 @@ export class CategoryPage {
         if (savedCategories) {
           console.log ("saved categories found");
           savedCategories.forEach((savedCategory) => {
+            //console.log ("retrieving "+JSON.stringify(savedCategory.items));
             let newMedicalRecord = new MedicalRecordModel(savedCategory.items);
             this.categories.push({ title: savedCategory.title, record: newMedicalRecord });
             newMedicalRecord.checklistUpdates().subscribe(update => {
@@ -44,7 +45,7 @@ export class CategoryPage {
               console.log("observable of category called inside dataService load with " + update);
             });
           })
-          console.log (this.categories);
+          //console.log (this.categories);
         }
         // no stored categories, so create dummies
         else {
@@ -138,6 +139,7 @@ export class CategoryPage {
   }
   removeCategory(category): void {
     let i = this.categories.indexOf(category);
+    // TBD: remove files
     if (i > -1) { this.categories.splice(i, 1); this.save(); }
   }
 

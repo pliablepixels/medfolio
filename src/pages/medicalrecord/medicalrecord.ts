@@ -103,21 +103,22 @@ export class MedicalRecordPage {
     // Get the data of an image
     this.camera.getPicture(options).then((imagePath) => {
       // Special handling for Android library
+
+      let newFileName = this.createFileName();
       if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
         this.filePath.resolveNativePath(imagePath)
           .then(filePath => {
             let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
             let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-            this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+            this.copyFileToLocalDir(correctPath, currentName, newFileName);
           });
       } else {
         var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-        this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+        this.copyFileToLocalDir(correctPath, currentName, newFileName);
       }
       
-      console.log('Save to:' + correctPath + currentName);
-      this.selectedCategory.record.addItem({ notes: '', photo: correctPath + currentName });
+      
 
     }, (err) => {
       this.presentToast('Error while selecting image.');
@@ -135,8 +136,12 @@ export class MedicalRecordPage {
 
   // Copy the image to a local folder
   private copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+    console.log ("*** persistent "+this.file.dataDirectory);
+      console.log ("*** persistent  via cordova "+cordova.file.dataDirectory);
+    this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
       this.lastImage = newFileName;
+      console.log('Save to:' +  newFileName);
+      this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
     }, error => {
       this.presentToast('Error while storing file.');
     });
@@ -152,11 +157,11 @@ export class MedicalRecordPage {
   }
 
   // Always get the accurate path to your apps folder
-  public pathForImage(img) {
+  public getFullPath(img) {
     if (img === null) {
       return '';
     } else {
-      return cordova.file.dataDirectory + img;
+      return this.file.dataDirectory + img;
     }
   }
 
