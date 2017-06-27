@@ -13,6 +13,8 @@ import { Camera } from '@ionic-native/camera';
 import { MyApp } from './app.component';
 import { DataProvider } from '../providers/data/data';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { IonicImageViewerModule } from 'ionic-img-viewer';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    IonicImageViewerModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

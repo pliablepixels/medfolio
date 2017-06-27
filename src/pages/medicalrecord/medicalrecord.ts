@@ -15,6 +15,9 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { DomSanitizer } from '@angular/platform-browser';
 
+
+import { ImageViewerController } from 'ionic-img-viewer';
+
 declare var cordova: any;
 
 /**
@@ -35,17 +38,25 @@ export class MedicalRecordPage {
   loading: Loading;
   viewMode:string;
 
+   _imageViewerCtrl: ImageViewerController;
+
   //photoTaken:false;
 
-  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, private sanitizer: DomSanitizer, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing) {
+  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, private sanitizer: DomSanitizer, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing, imageViewerCtrl: ImageViewerController) {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
     this.viewMode = 'cards';
+    this._imageViewerCtrl = imageViewerCtrl;
   }
 
 
 
+  presentImage (myImage) {
+    console.log ("PresentImage with "+myImage);
+    const imageViewer = this._imageViewerCtrl.create(myImage);
+    imageViewer.present();
+  }
 
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({

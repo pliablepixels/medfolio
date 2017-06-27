@@ -34,9 +34,9 @@
 
       <div *ngSwitchCase="'list'">
         <ion-list>
-          <ion-item *ngFor="let item of selectedCategory.record.items">
+          <ion-item *ngFor="let item of selectedCategory.record.items; let i=index">
             <ion-thumbnail item-start>
-              <img src="{{item.photo}}" class="fit-thumbnail" />
+              <img src="{{item.photo}}" class="fit-thumbnail"  #myImage (click)="presentImage(myImage)" tappable/>
             </ion-thumbnail>
 
             <p>{{item.notes}}</p>
@@ -58,7 +58,7 @@
               <ion-item>
                 <p>{{item.date}}</p>
               </ion-item>
-              <img src="{{item.photo}}"/>
+              <img src="{{item.photo}}" #myImage (click)="presentImage(myImage)" tappable/>
               <ion-card-content>
                 <p>{{item.notes}}</p>
               </ion-card-content>
