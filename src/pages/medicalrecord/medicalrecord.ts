@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 //import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { IonicPage, NavParams, AlertController, NavController, ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
 
 //import { Camera, Crop } from 'ionic-native';
 //import { Camera, CameraOptions } from 'ionic-native';
 import { Camera } from '@ionic-native/camera';
+import {Crop} from 'ionic-native';
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
@@ -17,6 +18,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 
 import { ImageViewerController } from 'ionic-img-viewer';
+import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
+
+
 
 declare var cordova: any;
 
@@ -42,7 +46,7 @@ export class MedicalRecordPage {
 
   //photoTaken:false;
 
-  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, private sanitizer: DomSanitizer, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing, imageViewerCtrl: ImageViewerController) {
+  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing, imageViewerCtrl: ImageViewerController, private commonUtils:CommonUtilsProvider, private camera:Camera, private file:File, private filePath:FilePath) {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
@@ -91,78 +95,17 @@ export class MedicalRecordPage {
     actionSheet.present();
   }
 
-  public takePicture(sourceType) {
-    // Create options for the Camera Dialog
-    var options = {
-      quality: 70,
-      sourceType: sourceType,
-      saveToPhotoAlbum: false,
-      correctOrientation: true
-    };
+  
 
-    // Get the data of an image
-    this.camera.getPicture(options).then((imagePath) => {
-      // Special handling for Android library
+  
 
-      let newFileName = this.createFileName();
-      if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-        this.filePath.resolveNativePath(imagePath)
-          .then(filePath => {
-            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-            this.copyFileToLocalDir(correctPath, currentName, newFileName);
-          });
-      } else {
-        var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-        var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-        this.copyFileToLocalDir(correctPath, currentName, newFileName);
-      }
-      
-      
+  
 
-    }, (err) => {
-      this.presentToast('Error while selecting image.');
-    });
-  }
-
-
-  // Create a new name for the image
-  private createFileName() {
-    var d = new Date(),
-      n = d.getTime(),
-      newFileName = n + ".jpg";
-    return newFileName;
-  }
-
-  // Copy the image to a local folder
-  private copyFileToLocalDir(namePath, currentName, newFileName) {
-    console.log ("*** persistent "+this.file.dataDirectory);
-      console.log ("*** persistent  via cordova "+cordova.file.dataDirectory);
-    this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-      this.lastImage = newFileName;
-      console.log('Save to:' +  newFileName);
-      this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
-    }, error => {
-      this.presentToast('Error while storing file.');
-    });
-  }
-
-  private presentToast(text) {
-    let toast = this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-      position: 'top'
-    });
-    toast.present();
-  }
+  
 
   // Always get the accurate path to your apps folder
   public getFullPath(img) {
-    if (img === null) {
-      return '';
-    } else {
-      return this.file.dataDirectory + img;
-    }
+    return this.commonUtils.getFullPath(img);
   }
 
   addItem(): void {
@@ -170,30 +113,7 @@ export class MedicalRecordPage {
     console.log("Taking picture");
 
   }
-  addItemOld(imageData): void {
-    let prompt = this.alertCtrl.create({
-      title: 'Describe the photo',
-      message: 'Notes:',
-      inputs: [
-        {
-          name: 'name'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.selectedCategory.record.addItem(data.name, imageData);
-          }
-        }
-      ]
-    });
-    prompt.present();
-
-  }
+ 
 
 
   toggleItem(item): void {
@@ -257,11 +177,61 @@ export class MedicalRecordPage {
 
     this.socialSharing.shareWithOptions(options).then(() => {
       // Success!
-      this.presentToast('Success sharing');
+      this.commonUtils.presentToast('Success sharing');
     }).catch(() => {
-      this.presentToast('Error while sharing image.');
+      this.commonUtils.presentToast('Error while sharing image.', 'error');
     });
   }
+
+
+
+   // Copy the image to a local folder
+   copyFileToLocalDir(namePath, currentName, newFileName) {
+    console.log ("*** persistent "+this.file.dataDirectory);
+    this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
+      //this.lastImage = newFileName;
+      console.log('Save to:' +  newFileName);
+      this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
+    }, error => {
+      this.commonUtils.presentToast('Error while storing file.');
+    });
+  }
+
+public takePicture(sourceType) {
+    // Create options for the Camera Dialog
+    var options = {
+      quality: 70,
+      sourceType: sourceType,
+      saveToPhotoAlbum: false,
+      correctOrientation: true
+    };
+
+    // Get the data of an image
+    this.camera.getPicture(options).then((imagePath) => {
+      // Special handling for Android library
+
+      let newFileName = this.commonUtils.createFileName();
+      if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+        this.filePath.resolveNativePath(imagePath)
+          .then(filePath => {
+            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+            this.copyFileToLocalDir(correctPath, currentName, newFileName);
+          });
+      } else {
+        var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+        var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+        this.copyFileToLocalDir(correctPath, currentName, newFileName);
+      }
+      
+      
+
+    }, (err) => {
+      this.commonUtils.presentToast('Error while selecting image.', 'error');
+    });
+  }
+
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MedicalRecordPage');

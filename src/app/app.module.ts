@@ -14,6 +14,7 @@ import { MyApp } from './app.component';
 import { DataProvider } from '../providers/data/data';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
+import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
     SocialSharing,
     Storage,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CommonUtilsProvider,
   ]
 })
 export class AppModule {}
