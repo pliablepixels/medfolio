@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, AlertController, Platform } from 'ionic-angular';
 import { MedicalRecordModel } from '../../models/medicalrecord-model';
 import { DataProvider } from '../../providers/data/data';
 //import {IntroPage} from '../intro/intro';
 import { Keyboard } from '@ionic-native/keyboard';
+import { List } from 'ionic-angular';
 
 
 
@@ -17,6 +18,7 @@ type Category = { title: string, records: MedicalRecordModel };
 })
 export class CategoryPage {
 
+   @ViewChild(List) list: List;
 
   categories: { title: string, record: MedicalRecordModel }[] = [];
 
@@ -109,7 +111,7 @@ export class CategoryPage {
     prompt.present();
 
   }
-  renameCategory(category): void {
+  renameCategory(category,id): void {
     let prompt = this.alertCtrl.create({
       title: 'Rename Category',
       message: 'Enter new name for this category:', inputs: [
@@ -127,11 +129,12 @@ export class CategoryPage {
             this.save();
           }
           console.log("saved inside renameCategory");
+          
         }
       }
       ]
     });
-    prompt.present();
+    prompt.present().then(()=> {this.list.closeSlidingItems();});
   }
   viewCategory(category): void {
     console.log("pushing category to nav");

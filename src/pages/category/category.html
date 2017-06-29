@@ -12,8 +12,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-list nolines>
-    <ion-item-sliding *ngFor = "let category of categories">
+  <ion-list nolines >
+    <ion-item-sliding  #slidingItems *ngFor = "let category of categories">
       <button ion-item (click)="viewCategory(category)" >
         <ion-icon name="folder-open" item-start></ion-icon>
         {{category.title}}
@@ -21,12 +21,12 @@
       </button>
 
       <ion-item-options>
-        <button ion-button icon-only color="light" (click)="renameCategory(category)">
-          <ion-icon name="clipboard"></ion-icon>Edit
+        <button ion-button icon-only color="light" (click)="renameCategory(category, slidingItems)">
+          <ion-icon name="clipboard"></ion-icon>Edit&nbsp;
         </button>
 
         <button ion-button icon-only color="danger" (click)="removeCategory(category)">
-          <ion-icon name="trash"></ion-icon>Delete
+          <ion-icon name="trash"></ion-icon>Delete&nbsp;
         </button>
       </ion-item-options>
     </ion-item-sliding>
