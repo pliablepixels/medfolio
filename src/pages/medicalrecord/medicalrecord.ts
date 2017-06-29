@@ -22,14 +22,8 @@ import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 
 
 
-declare var cordova: any;
+//declare var cordova: any;
 
-/**
- * Generated class for the ChecklistPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 @IonicPage()
 @Component({
   selector: 'page-medicalrecord',
@@ -121,8 +115,7 @@ export class MedicalRecordPage {
   }
 
   removeItem(item): void {
-    this.selectedCategory.toggleItem(item);
-
+   this.selectedCategory.record.removeItem(item);
   }
 
 
@@ -197,7 +190,7 @@ export class MedicalRecordPage {
     });
   }
 
-public takePicture(sourceType) {
+ takePicture(sourceType) {
     // Create options for the Camera Dialog
     var options = {
       quality: 70,
@@ -231,7 +224,7 @@ public takePicture(sourceType) {
     });
   }
 
-
+  
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MedicalRecordPage');

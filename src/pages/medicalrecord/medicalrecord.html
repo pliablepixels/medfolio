@@ -1,89 +1,90 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      {{selectedCategory.title}}
-    </ion-title>
-    <ion-buttons end>
-
-      <button ion-button icon-only (click)="addItem()">
-        <ion-icon name="camera"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
+   <ion-navbar color="primary">
+      <ion-title>
+         {{selectedCategory.title}}
+      </ion-title>
+      <ion-buttons end>
+         <button ion-button icon-only (click)="addItem()">
+            <ion-icon name="camera"></ion-icon>
+         </button>
+      </ion-buttons>
+   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-item *ngIf="!selectedCategory.record.items.length" (click)="addItem()" tappable>
-    No records. Tap the
-    <ion-icon name="camera"></ion-icon> icon to add.
-  </ion-item>
-
-  <div *ngIf="selectedCategory.record.items.length">
-    <div padding>
-    <ion-segment [(ngModel)]="viewMode">
-      <ion-segment-button value="list">
-        List
-      </ion-segment-button>
-      <ion-segment-button value="cards">
-        Cards
-      </ion-segment-button>
-    </ion-segment>
-    </div>
-
-    <div [ngSwitch]="viewMode">
-
-      <div *ngSwitchCase="'list'">
-        <ion-list>
-          <ion-item *ngFor="let item of selectedCategory.record.items; let i=index">
-            <ion-thumbnail item-start>
-              <img src="{{getFullPath(item.photo)}}" class="fit-thumbnail"  #myImage (click)="presentImage(myImage)" tappable/>
-            </ion-thumbnail>
-
-            <p>{{item.notes}}</p>
-            <button ion-button icon-start clear item-end (click)="socialShare(item)"><ion-icon name="share"></ion-icon>share</button>
-
-            <button ion-button icon-start clear item-end (click)="updateNote(item)"><ion-icon name="create"></ion-icon>notes</button>
-          </ion-item>
-        </ion-list>
-
-
+   <ion-item *ngIf="!selectedCategory.record.items.length" (click)="addItem()" tappable>
+   No records. Tap the
+   <ion-icon name="camera"></ion-icon>
+   icon to add.
+   </ion-item>
+   
+   <div *ngIf="selectedCategory.record.items.length">
+      <div padding>
+         <ion-segment [(ngModel)]="viewMode">
+         <ion-segment-button value="list">
+            List
+         </ion-segment-button>
+         <ion-segment-button value="cards">
+            Cards
+         </ion-segment-button>
+         </ion-segment>
       </div>
-      <div *ngSwitchCase="'cards'">
-       
-        <ion-grid> 
-        <ion-row wrap>
-          <ion-col  col-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let item of selectedCategory.record.items; let isEven=even">
-
-            <ion-card>
-              <ion-item>
-                <p>{{item.date}}</p>
-              </ion-item>
-              <img src="{{getFullPath(item.photo)}}" #myImage (click)="presentImage(myImage)" tappable/>
-              <ion-card-content>
-                <p>{{item.notes}}</p>
-              </ion-card-content>
-              <ion-row>
-                <ion-col>
-                  <button ion-button icon-left clear small (click)="socialShare(item)">
-                      <ion-icon name="share"></ion-icon>
-                      <div>Share</div>
-                  </button>
-                </ion-col>
-
-                <ion-col>
-                  <button ion-button icon-left clear small (click)="updateNote(item)">
-                      <ion-icon name="create"></ion-icon>
-                      <div>Notes</div>
-                  </button>
-                </ion-col>
-              </ion-row>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-        </ion-grid>
-        
+      <div [ngSwitch]="viewMode">
+         <div *ngSwitchCase="'list'">
+            <ion-list nolines>
+               <ion-item-sliding  *ngFor="let item of selectedCategory.record.items; let i=index">
+                  <ion-item>
+                     <ion-thumbnail item-start>
+                        <img src="{{getFullPath(item.photo)}}" class="fit-thumbnail" #myImage (click)="presentImage(myImage)" tappable/>
+                     </ion-thumbnail>
+                     <p>{{item.notes}}</p>
+                     <button ion-button icon-start clear item-end (click)="socialShare(item)">
+                        <ion-icon name="share"></ion-icon>
+                        share
+                     </button>
+                     <button ion-button icon-start clear item-end (click)="updateNote(item)">
+                        <ion-icon name="create"></ion-icon>
+                        notes
+                     </button>
+                     
+                  </ion-item>
+                  <ion-item-options>
+                        <button ion-button icon-only color="danger" (click)="removeItem(item)">
+                           <ion-icon name="trash"></ion-icon>
+                           Delete&nbsp;
+                        </button>
+                     </ion-item-options>
+               </ion-item-sliding>
+            </ion-list>
+         </div>
+         <div *ngSwitchCase="'cards'">
+            <ion-grid>
+               <ion-row wrap>
+                  <ion-col col-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let item of selectedCategory.record.items; let isEven=even">
+                     <ion-card>
+                        <ion-item>
+                           <p>{{item.date}}</p>
+                        </ion-item>
+                        <img src="{{getFullPath(item.photo)}}" #myImage (click)="presentImage(myImage)" tappable/>
+                        <ion-card-content>
+                           <p>{{item.notes}}</p>
+                        </ion-card-content>
+                        <ion-row>
+                           <ion-col>
+                              <button ion-button icon-left clear small (click)="socialShare(item)">
+                                 <div>Share</div>
+                              </button>
+                           </ion-col>
+                           <ion-col>
+                              <button ion-button icon-left clear small (click)="updateNote(item)">
+                                 <div>Notes</div>
+                              </button>
+                           </ion-col>
+                        </ion-row>
+                     </ion-card>
+                  </ion-col>
+               </ion-row>
+            </ion-grid>
+         </div>
       </div>
-    </div>
-  </div>
-
-</ion-content>
+   </div>
