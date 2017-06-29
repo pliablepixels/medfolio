@@ -115,7 +115,14 @@ export class MedicalRecordPage {
   }
 
   removeItem(item): void {
-   this.selectedCategory.record.removeItem(item);
+    console.log ("Calling model remove");
+   this.selectedCategory.record.removeItem(item)
+   .then (success => {
+     //this.commonUtils.presentToast('success deleting');
+   }, 
+   error => {
+     this.commonUtils.presentToast('error deleting image');
+   });
   }
 
 

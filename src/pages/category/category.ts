@@ -142,8 +142,15 @@ export class CategoryPage {
   }
   removeCategory(category): void {
     let i = this.categories.indexOf(category);
-    // TBD: remove files
-    if (i > -1) { this.categories.splice(i, 1); this.save(); }
+
+    //console.log (JSON.stringify(category.record));
+    category.record.items.forEach((item) => {
+        console.log ("Deleting "+item.notes);
+    });
+
+    
+    if (i > -1) { this.categories.splice(i, 1); this.save();  }
+    this.list.closeSlidingItems();
   }
 
   save(): void {

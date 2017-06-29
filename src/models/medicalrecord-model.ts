@@ -1,11 +1,22 @@
 import {Observable} from 'rxjs/Observable';
 import * as moment from 'moment';
+import { File } from '@ionic-native/file';
+
+import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
+
+
+
+ //var file:File;
+
 
 export class MedicalRecordModel {
     medicalRecord:any;
     medicalRecordObserver:any;
+   
+   
 
     constructor (public items: any[]){
+        
         this.items = items;
         this.medicalRecord = Observable.create(observer => { 
             this.medicalRecordObserver = observer;
@@ -24,10 +35,18 @@ export class MedicalRecordModel {
 
     }
 
-    removeItem(item):void {
+    removeItem(item){
+        let file = new File;
+        
+        
+        console.log ("inside item delete with "+file.dataDirectory);
         let index = this.items.indexOf(item);
         if (index >-1) {this.items.splice(index,1);}
-        this.medicalRecordObserver.next(true);
+
+        return file.removeFile (file.dataDirectory, item.photo);
+
+
+
     }
 
     
