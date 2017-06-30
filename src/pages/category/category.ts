@@ -6,11 +6,7 @@ import { DataProvider } from '../../providers/data/data';
 import { Keyboard } from '@ionic-native/keyboard';
 import { List } from 'ionic-angular';
 
-
-
 type Category = { title: string, records: MedicalRecordModel };
-
-// page 177
 @IonicPage()
 @Component({
   selector: 'page-category',
@@ -18,8 +14,7 @@ type Category = { title: string, records: MedicalRecordModel };
 })
 export class CategoryPage {
 
-   @ViewChild(List) list: List;
-
+  @ViewChild(List) list: List; // needed to close sliding list
   categories: { title: string, record: MedicalRecordModel }[] = [];
 
   constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard) {
@@ -30,41 +25,42 @@ export class CategoryPage {
     console.log("Inside viewload in homepage");
 
     this.platform.ready().then(() => {
+      // load data from DB
       this.dataService.getData().then((categories) => {
         let savedCategories: any = false;
         if (typeof (categories) != "undefined") {
           savedCategories = JSON.parse(categories);
+          // if we have a DB, this is not the first run
+          this.dataService.setIntroShown(true);
         }
 
         if (savedCategories) {
-          console.log ("saved categories found");
+          console.log("saved categories found");
           savedCategories.forEach((savedCategory) => {
-            //console.log ("retrieving "+JSON.stringify(savedCategory.items));
+            // load the data and re-create observers
             let newMedicalRecord = new MedicalRecordModel(savedCategory.items);
             this.categories.push({ title: savedCategory.title, record: newMedicalRecord });
-            newMedicalRecord.checklistUpdates().subscribe(update => {
+            newMedicalRecord.itemUpdates().subscribe(update => {
               this.save();
               console.log("observable of category called inside dataService load with " + update);
             });
           })
-          //console.log (this.categories);
         }
-        // no stored categories, so create dummies
+        // no stored categories, so create default categories
         else {
-          console.log ("No categories saved, creating...");
+          console.log("No categories saved, creating...");
           var defaultCategories = ["X-Rays", "Medical reports", "Lab Results"];
           for (let label of defaultCategories) {
             let newMedicalRecord = new MedicalRecordModel([]);
             this.categories.push({ title: label, record: newMedicalRecord });
-            newMedicalRecord.checklistUpdates().subscribe(update => {
+            newMedicalRecord.itemUpdates().subscribe(update => {
               this.save();
               console.log("observable of category called inside defaultCategories with " + update);
             });
 
           }
-
         }
-
+        // make sure into is only shown once
         if (!this.dataService.isIntroShown()) {
           this.dataService.setIntroShown(true);
           this.navCtrl.setRoot("IntroPage");
@@ -73,15 +69,12 @@ export class CategoryPage {
         else {
           console.log("Intro already shown");
         }
-
       })
     })
 
-
-
-
-
   }
+
+  // create new record category
   addCategory(): void {
 
     let prompt = this.alertCtrl.create({
@@ -98,7 +91,7 @@ export class CategoryPage {
           let newMedicalRecord = new MedicalRecordModel([]);
           this.categories.push({ title: data.name, record: newMedicalRecord });
 
-          newMedicalRecord.checklistUpdates().subscribe(update => {
+          newMedicalRecord.itemUpdates().subscribe(update => {
             this.save();
             console.log(" observable called inside addCategory with " + update);
           });
@@ -111,7 +104,9 @@ export class CategoryPage {
     prompt.present();
 
   }
-  renameCategory(category,id): void {
+
+  // rename existing record category
+  renameCategory(category, id): void {
     let prompt = this.alertCtrl.create({
       title: 'Rename Category',
       message: 'Enter new name for this category:', inputs: [
@@ -129,30 +124,55 @@ export class CategoryPage {
             this.save();
           }
           console.log("saved inside renameCategory");
-          
+
         }
       }
       ]
     });
-    prompt.present().then(()=> {this.list.closeSlidingItems();});
+    prompt.present().then(() => { this.list.closeSlidingItems(); });
   }
+
+  // show records within a category
   viewCategory(category): void {
     console.log("pushing category to nav");
     this.navCtrl.push('MedicalRecordPage', { category: category });
   }
+
+  // remove category and all records along with it
   removeCategory(category): void {
     let i = this.categories.indexOf(category);
-
-    //console.log (JSON.stringify(category.record));
-    category.record.items.forEach((item) => {
-        console.log ("Deleting "+item.notes);
+    let alert = this.alertCtrl.create({
+      title: 'Confirm deletion',
+      message: 'Delete ' + category.title + ' and all records in it?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel tapped');
+            this.list.closeSlidingItems();
+          }
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            console.log('Ok clicked');
+            category.record.items.forEach((item) => {
+              console.log("Deleting " + item.notes);
+            });
+            if (i > -1){ this.categories.splice(i, 1); this.save(); }
+            this.list.closeSlidingItems();
+          }
+        }
+      ]
     });
+    alert.present();
 
-    
-    if (i > -1) { this.categories.splice(i, 1); this.save();  }
-    this.list.closeSlidingItems();
+
+
   }
 
+  // save all categories and associated records
   save(): void {
     //console.log ("inside save of category.ts");
     this.keyboard.close();
