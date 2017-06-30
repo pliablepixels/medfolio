@@ -45,7 +45,7 @@ import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
     Camera,
     FilePath,
     SocialSharing,
-    Storage,
+    //Storage,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CommonUtilsProvider,
   ]
