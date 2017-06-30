@@ -31,11 +31,12 @@ export class CategoryPage {
         if (typeof (categories) != "undefined") {
           savedCategories = JSON.parse(categories);
           // if we have a DB, this is not the first run
-          this.dataService.setIntroShown(true);
+          
         }
 
         if (savedCategories) {
           console.log("saved categories found");
+          this.dataService.setIntroShown(true);
           savedCategories.forEach((savedCategory) => {
             // load the data and re-create observers
             let newMedicalRecord = new MedicalRecordModel(savedCategory.items);
@@ -49,6 +50,7 @@ export class CategoryPage {
         // no stored categories, so create default categories
         else {
           console.log("No categories saved, creating...");
+          this.dataService.setIntroShown(false);
           var defaultCategories = ["X-Rays", "Medical reports", "Lab Results"];
           for (let label of defaultCategories) {
             let newMedicalRecord = new MedicalRecordModel([]);
@@ -57,7 +59,7 @@ export class CategoryPage {
               this.save();
               console.log("observable of category called inside defaultCategories with " + update);
             });
-
+            this.save();
           }
         }
         // make sure into is only shown once

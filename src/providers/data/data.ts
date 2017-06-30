@@ -35,9 +35,11 @@ export class DataProvider {
   }
   setIntroShown(val): void {
     this.introShown = val;
-    this.storage.set('introShown','1');
+    console.log ("setting intro:"+this.introShown);
+    
   }
   isIntroShown(): boolean {
+    console.log ("returning intro:"+this.introShown);
     return this.introShown;
   }
 
