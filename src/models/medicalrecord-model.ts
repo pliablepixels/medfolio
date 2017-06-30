@@ -4,17 +4,10 @@ import { File } from '@ionic-native/file';
 
 import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
 
-
-
- //var file:File;
-
-
 export class MedicalRecordModel {
     medicalRecord:any;
     medicalRecordObserver:any;
    
-   
-
     constructor (public items: any[]){
         
         this.items = items;
@@ -24,6 +17,7 @@ export class MedicalRecordModel {
 
     } 
 
+    // add a new item to a specific category
     addItem(obj):void {
         this.items.unshift({
             notes:obj.notes,
@@ -35,22 +29,19 @@ export class MedicalRecordModel {
 
     }
 
+    // remove an new item from a specific category
     removeItem(item){
         let file = new File;
-        
-        
         console.log ("inside item delete with "+file.dataDirectory);
         let index = this.items.indexOf(item);
         if (index >-1) {this.items.splice(index,1);}
-
+        // Let's also remmber to remove the associated photo
         return file.removeFile (file.dataDirectory, item.photo);
 
 
 
     }
-
-    
-
+    // edit the note associated to the item
     updateNote(item,note):void {
         console.log ("Inside updateNote with:"+JSON.stringify(item));
         console.log ("Change note to:"+note);
@@ -67,8 +58,7 @@ export class MedicalRecordModel {
         
     }
 
-    
-    checklistUpdates(): Observable<any> 
+    itemUpdates(): Observable<any> 
     { 
         return this.medicalRecord;
     }

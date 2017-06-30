@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
+// DB Handler
+
 @Injectable()
 export class DataProvider {
 
   introShown: boolean = false;
-
-  //constructor(public http: Http) {
   constructor(public storage: Storage) {
     console.log(' DataProvider Provider constructor');
   }
+
 
   getData(): Promise<any> {
     return this.storage.get('categories');
@@ -20,7 +21,7 @@ export class DataProvider {
     let saveData = [];
     categories.forEach((category) => {
 
-      saveData.push({
+      saveData.push({ // leave out observables
         title: category.title,
         items: category.record.items
       })
@@ -34,6 +35,7 @@ export class DataProvider {
   }
   setIntroShown(val): void {
     this.introShown = val;
+    this.storage.set('introShown','1');
   }
   isIntroShown(): boolean {
     return this.introShown;
