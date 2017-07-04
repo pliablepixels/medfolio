@@ -14,7 +14,7 @@ import { Pipe, PipeTransform, Injectable } from '@angular/core';
 export class SearchPipe implements PipeTransform {
   
   transform(items:any[], param:string) {
-    console.log (" GOT PARAM="+param);
+    //console.log (" GOT PARAM="+param);
     if (param) {
       param = param.toLowerCase();
       return items.filter(item => {

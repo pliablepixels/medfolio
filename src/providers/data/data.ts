@@ -16,19 +16,23 @@ export class DataProvider {
     return this.storage.get('categories');
   }
 
-  save(categories) {
+  save(categories): Promise <any> {
     console.log("inside data-model save");
     let saveData = [];
     categories.forEach((category) => {
-
-      saveData.push({ // leave out observables
+      
+        saveData.push({ // leave out observables
         title: category.title,
         items: category.record.items
-      })
+      });
+
+    
+      
     });
     let strData = JSON.stringify(saveData);
-    this.storage.set('categories', strData);
-    console.log("--->Saved: " + strData);
+     console.log("--->Saving: " + strData);
+    return this.storage.set('categories', strData);
+   
 
 
 

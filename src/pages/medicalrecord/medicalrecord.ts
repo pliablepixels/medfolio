@@ -30,6 +30,7 @@ import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 export class MedicalRecordPage {
   selectedCategory: any;
 
+
   lastImage: string = null;
   loading: Loading;
   viewMode:string;
@@ -44,6 +45,7 @@ export class MedicalRecordPage {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
+  
     this.viewMode = 'cards';
     this._imageViewerCtrl = imageViewerCtrl;
   }
@@ -122,7 +124,7 @@ export class MedicalRecordPage {
      //this.commonUtils.presentToast('success deleting');
    }, 
    error => {
-     this.commonUtils.presentToast('error deleting image');
+     this.commonUtils.presentToast('error deleting image','error');
    });
   }
 
