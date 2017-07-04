@@ -1,33 +1,31 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 //import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
-
 //import { Camera, Crop } from 'ionic-native';
 //import { Camera, CameraOptions } from 'ionic-native';
 import { Camera } from '@ionic-native/camera';
-import {Crop} from 'ionic-native';
+//import {Crop} from 'ionic-native';
 import { File } from '@ionic-native/file';
-import { Transfer } from '@ionic-native/transfer';
+//import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
-
 import { SocialSharing } from '@ionic-native/social-sharing';
-
 //import { Crop } from '@ionic-native/crop'
-
-import { DomSanitizer } from '@angular/platform-browser';
-
-
+//import { DomSanitizer } from '@angular/platform-browser';
 import { ImageViewerController } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
-
+//import {SearchPipe} from "../../pipes/search/search";
 
 
 //declare var cordova: any;
+
+
 
 @IonicPage()
 @Component({
   selector: 'page-medicalrecord',
   templateUrl: 'medicalrecord.html',
+  
+
 })
 export class MedicalRecordPage {
   selectedCategory: any;
@@ -35,6 +33,8 @@ export class MedicalRecordPage {
   lastImage: string = null;
   loading: Loading;
   viewMode:string;
+  term: string = '';
+  searchEnabled:boolean = false;
 
    _imageViewerCtrl: ImageViewerController;
 
@@ -49,6 +49,13 @@ export class MedicalRecordPage {
   }
 
 
+ toggleSearch():void {
+   this.searchEnabled = !this.searchEnabled;
+ }
+ searchFn(ev: any) {
+   //console.log ("SEARCHFN");
+    this.term = ev.target.value;
+  }
 
   presentImage (myImage) {
     console.log ("PresentImage with "+myImage);
@@ -91,12 +98,6 @@ export class MedicalRecordPage {
 
   
 
-  
-
-  
-
-  
-
   // Always get the accurate path to your apps folder
   public getFullPath(img) {
     return this.commonUtils.getFullPath(img);
@@ -136,7 +137,7 @@ export class MedicalRecordPage {
       inputs: [
         {
           name: 'notes',
-          placeholder: item.notes
+          value: item.notes
 
         }
       ],
@@ -210,19 +211,7 @@ export class MedicalRecordPage {
     this.camera.getPicture(options).then((imagePath) => {
       // Special handling for Android library
 
-      let newFileName = this.commonUtils.createFileName();
-      if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-        this.filePath.resolveNativePath(imagePath)
-          .then(filePath => {
-            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-            this.copyFileToLocalDir(correctPath, currentName, newFileName);
-          });
-      } else {
-        var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-        var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-        this.copyFileToLocalDir(correctPath, currentName, newFileName);
-      }
+      this.savePhoto(imagePath, sourceType);
       
       
 
@@ -231,7 +220,25 @@ export class MedicalRecordPage {
     });
   }
 
-  
+  savePhoto(imagePath,sourceType):Promise <any>  {
+    return  new Promise ((resolve, reject ) => {
+      let newFileName = this.commonUtils.createFileName();
+      if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+        this.filePath.resolveNativePath(imagePath)
+          .then(filePath => {
+            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+            this.copyFileToLocalDir(correctPath, currentName, newFileName);
+            resolve();
+          });
+      } else {
+        var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+        var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+        this.copyFileToLocalDir(correctPath, currentName, newFileName);
+        resolve();
+      }
+    });
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MedicalRecordPage');

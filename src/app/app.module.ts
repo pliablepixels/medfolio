@@ -15,11 +15,13 @@ import { DataProvider } from '../providers/data/data';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
+import { SearchPipe } from '../pipes/search/search';
 
 
 @NgModule({
   declarations: [
     MyApp,
+  
     
     
   ],
