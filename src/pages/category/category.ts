@@ -5,6 +5,7 @@ import { DataProvider } from '../../providers/data/data';
 //import {IntroPage} from '../intro/intro';
 import { Keyboard } from '@ionic-native/keyboard';
 import { List } from 'ionic-angular';
+import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 
 type Category = { title: string, records: MedicalRecordModel };
 @IonicPage()
@@ -16,8 +17,9 @@ export class CategoryPage {
 
   @ViewChild(List) list: List; // needed to close sliding list
   categories: { title: string, record: MedicalRecordModel }[] = [];
+ 
 
-  constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard) {
+  constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard, private commonUtils:CommonUtilsProvider) {
     console.log("CategoryPage constructor");
   }
 
@@ -101,7 +103,13 @@ export class CategoryPage {
       },
       {
         text: 'Save', handler: data => {
-          let newMedicalRecord = new MedicalRecordModel([]);
+
+          data.name = data.name.trim();
+          if (!data.name) return;
+
+          if (!this.categoryExist(data.name))
+          {
+            let newMedicalRecord = new MedicalRecordModel([]);
           this.categories.push({ title: data.name, record: newMedicalRecord });
 
           newMedicalRecord.itemUpdates().subscribe(update => {
@@ -110,6 +118,12 @@ export class CategoryPage {
           });
           this.save();
           console.log("saved inside addCategory");
+
+        }
+        else {
+          this.commonUtils.presentToast('category exists', 'error');
+        }
+          
         }
       }
       ]
@@ -117,6 +131,21 @@ export class CategoryPage {
     prompt.present();
     } // else
   }
+
+  categoryExist(name):boolean {
+    let found:boolean = false;
+    name = name.toLowerCase();
+    for (let i=0; i< this.categories.length; i++)
+    {
+      if (this.categories[i].title.toLowerCase() == name)
+      {
+        found = true;
+        break;
+      }
+    }
+    return found;
+  }
+
 
   // rename existing record category
   renameCategory(category, id): void {
@@ -186,10 +215,10 @@ export class CategoryPage {
   }
 
   // save all categories and associated records
-  save(): void {
+  save(): Promise <any> {
     //console.log ("inside save of category.ts");
     this.keyboard.close();
-    this.dataService.save(this.categories);
+   return  this.dataService.save(this.categories);
   }
 
 }
