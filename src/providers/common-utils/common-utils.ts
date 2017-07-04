@@ -4,7 +4,7 @@ import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
-import { ToastController, Platform } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 
 @Injectable()
 export class CommonUtilsProvider {

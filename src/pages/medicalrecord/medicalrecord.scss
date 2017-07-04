@@ -2,4 +2,11 @@ page-medicalrecord {
   .fit-thumbnail {
     object-fit: contain;
   }
+
+ .card-image {
+        height:150px;
+        //width:150px;
+        object-fit:cover;
+    }
+ 
 }

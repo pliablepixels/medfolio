@@ -77,8 +77,19 @@ export class CategoryPage {
   }
 
   // create new record category
-  addCategory(): void {
+  addCategory(cat?): void {
+    // tbd
+    if (cat == 'unfiled') {
+      let newMedicalRecord = new MedicalRecordModel([]);
+          this.categories.push({ title: cat, record: newMedicalRecord });
 
+          newMedicalRecord.itemUpdates().subscribe(update => {
+            this.save();
+            console.log(" observable called inside addCategory with " + update);
+          });
+          this.save();
+    }
+    else {
     let prompt = this.alertCtrl.create({
       title: 'New Category',
       message: 'Enter new category name:', inputs: [
@@ -98,13 +109,13 @@ export class CategoryPage {
             console.log(" observable called inside addCategory with " + update);
           });
           this.save();
-          console.log("saved inside addChecklist");
+          console.log("saved inside addCategory");
         }
       }
       ]
     });
     prompt.present();
-
+    } // else
   }
 
   // rename existing record category

@@ -2,8 +2,6 @@ import {Observable} from 'rxjs/Observable';
 import * as moment from 'moment';
 import { File } from '@ionic-native/file';
 
-import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
-
 export class MedicalRecordModel {
     medicalRecord:any;
     medicalRecordObserver:any;
