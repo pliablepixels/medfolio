@@ -20,7 +20,7 @@ export class MedicalRecordModel {
         this.items.unshift({
             notes:obj.notes,
             photo:obj.photo,
-            date:moment().format("MMM Do YYYY, h:mm:ss a"),
+            date:obj.date || moment().format("MMM Do YYYY, h:mm:ss a"),
             checked:false
         });
         this.medicalRecordObserver.next(true);

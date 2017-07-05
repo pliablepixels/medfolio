@@ -53,7 +53,7 @@ export class CategoryPage {
         else {
           console.log("No categories saved, creating...");
           this.dataService.setIntroShown(false);
-          var defaultCategories = ["X-Rays", "Medical reports", "Lab Results"];
+          var defaultCategories = ["All","X-Rays", "Medical reports", "Lab Results"];
           for (let label of defaultCategories) {
             let newMedicalRecord = new MedicalRecordModel([]);
             this.categories.push({ title: label, record: newMedicalRecord });
@@ -78,20 +78,10 @@ export class CategoryPage {
 
   }
 
+  
   // create new record category
-  addCategory(cat?): void {
+  addCategory(): void {
     // tbd
-    if (cat == 'unfiled') {
-      let newMedicalRecord = new MedicalRecordModel([]);
-          this.categories.push({ title: cat, record: newMedicalRecord });
-
-          newMedicalRecord.itemUpdates().subscribe(update => {
-            this.save();
-            console.log(" observable called inside addCategory with " + update);
-          });
-          this.save();
-    }
-    else {
     let prompt = this.alertCtrl.create({
       title: 'New Category',
       message: 'Enter new category name:', inputs: [
@@ -129,7 +119,7 @@ export class CategoryPage {
       ]
     });
     prompt.present();
-    } // else
+  
   }
 
   categoryExist(name):boolean {
@@ -177,7 +167,7 @@ export class CategoryPage {
   // show records within a category
   viewCategory(category): void {
     console.log("pushing category to nav");
-    this.navCtrl.push('MedicalRecordPage', { category: category });
+    this.navCtrl.push('MedicalRecordPage', { category: category, root:this.categories });
   }
 
   // remove category and all records along with it

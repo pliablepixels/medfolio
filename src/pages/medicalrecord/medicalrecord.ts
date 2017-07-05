@@ -1,24 +1,15 @@
 import { Component} from '@angular/core';
-//import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
-//import { Camera, Crop } from 'ionic-native';
-//import { Camera, CameraOptions } from 'ionic-native';
 import { Camera } from '@ionic-native/camera';
-//import {Crop} from 'ionic-native';
 import { File } from '@ionic-native/file';
-//import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { SocialSharing } from '@ionic-native/social-sharing';
-//import { Crop } from '@ionic-native/crop'
-//import { DomSanitizer } from '@angular/platform-browser';
+import { Crop } from '@ionic-native/crop'
 import { ImageViewerController } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
-//import {SearchPipe} from "../../pipes/search/search";
 
 
 //declare var cordova: any;
-
-
 
 @IonicPage()
 @Component({
@@ -36,20 +27,33 @@ export class MedicalRecordPage {
   viewMode:string;
   term: string = '';
   searchEnabled:boolean = false;
+  cardSettings:boolean = false;
+  categories:any;
+
+
 
    _imageViewerCtrl: ImageViewerController;
 
   //photoTaken:false;
 
-  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing, imageViewerCtrl: ImageViewerController, private commonUtils:CommonUtilsProvider, private camera:Camera, private file:File, private filePath:FilePath) {
+  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing, imageViewerCtrl: ImageViewerController, private commonUtils:CommonUtilsProvider, private camera:Camera, private file:File, private filePath:FilePath, private crop:Crop) {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
+    this.categories = this.navParams.get('root');
+
+    for (let i=0; i < this.categories.length; i++)
+    {
+      console.log ("**** CATEGORY "+this.categories[i].title);
+    }
   
     this.viewMode = 'cards';
     this._imageViewerCtrl = imageViewerCtrl;
   }
 
+toggleSettingsCards() {
+  this.cardSettings = !this.cardSettings;
+}
 
  toggleSearch():void {
    this.searchEnabled = !this.searchEnabled;
@@ -102,7 +106,19 @@ export class MedicalRecordPage {
 
   // Always get the accurate path to your apps folder
   public getFullPath(img) {
-    return this.commonUtils.getFullPath(img);
+    let path =  this.commonUtils.getFullPath(img);
+    // WKWebView specific code - doesn't work 
+    /*
+    if (this.platform.is('ios'))
+    {
+      //console.log ("removing path...");
+      if (path.startsWith("file://")) {
+        path = path.slice(8);
+        console.log ("SLICED and returning "+path);
+      }
+    }*/
+    return path;
+
   }
 
   addItem(): void {
@@ -112,10 +128,6 @@ export class MedicalRecordPage {
   }
  
 
-
-  toggleItem(item): void {
-
-  }
 
   removeItem(item): void {
     console.log ("Calling model remove");
@@ -128,8 +140,60 @@ export class MedicalRecordPage {
    });
   }
 
+  getCategory(val) {
+    let category:any = undefined;
+    console.log ("Searching for category="+val);
+    
+    for (let i=0; i < this.categories.length; i++) {
+      console.log("comparing to"+this.categories[i].title);
+      if (this.categories[i].title == val)
+      {
+        console.log ("FOUND");
+        category = this.categories[i];
+        break;
+      }
+    }
+    return category;
+  }
 
-  
+  moveItem(item): void {
+    let options = {
+      title: 'Move to Category',
+      inputs: [],
+      message: '',
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            console.log ("GOT "+data);
+            let cat = this.getCategory(data);
+            if (cat) {
+              console.log ("MOVING to "+cat);
+              cat.record.addItem({notes:item.notes, photo:item.photo, date:item.date});
+              this.removeItem(item);
+
+            }
+
+          }
+        }
+      ]
+    };
+    for (let i=0; i < this.categories.length; i++)
+    {
+      if (this.selectedCategory.title != this.categories[i].title )
+      {
+          options.inputs.push ({type:'radio',label:this.categories[i].title, value: this.categories[i].title});
+      }
+      
+    }
+    let prompt = this.alertCtrl.create(options);
+    
+    
+    prompt.present();
+  }
 
   updateNote(item): void {
 
@@ -206,14 +270,23 @@ export class MedicalRecordPage {
       quality: 70,
       sourceType: sourceType,
       saveToPhotoAlbum: false,
-      correctOrientation: true
+      correctOrientation: true,
+      allowEdit:false
     };
 
     // Get the data of an image
     this.camera.getPicture(options).then((imagePath) => {
       // Special handling for Android library
 
-      this.savePhoto(imagePath, sourceType);
+      this.crop.crop(imagePath).then ((croppedPath) => {
+        this.savePhoto(croppedPath, sourceType);
+      },
+      (whatever) => {
+        console.log ("Ignoring crop");
+        this.savePhoto(imagePath, sourceType);
+      }
+      );
+      //this.savePhoto(imagePath, sourceType);
       
       
 
