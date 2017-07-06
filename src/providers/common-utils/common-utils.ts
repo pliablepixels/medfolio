@@ -19,7 +19,7 @@ export class CommonUtilsProvider {
 
     let toast = this.toastCtrl.create({
       message: text,
-      duration: dur || 3000,
+      duration: dur || 1800,
       position: 'top',
       cssClass: cssClass
     });

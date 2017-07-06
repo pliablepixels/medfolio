@@ -7,6 +7,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { List } from 'ionic-angular';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 
+
 type Category = { title: string, records: MedicalRecordModel };
 @IonicPage()
 @Component({
@@ -53,7 +54,7 @@ export class CategoryPage {
         else {
           console.log("No categories saved, creating...");
           this.dataService.setIntroShown(false);
-          var defaultCategories = ["All","X-Rays", "Medical reports", "Lab Results"];
+          var defaultCategories = ["X-Rays", "Medical reports", "Lab Results"];
           for (let label of defaultCategories) {
             let newMedicalRecord = new MedicalRecordModel([]);
             this.categories.push({ title: label, record: newMedicalRecord });

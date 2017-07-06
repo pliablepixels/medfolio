@@ -69,27 +69,35 @@ toggleSettingsCards() {
     imageViewer.present();
   }
 
-  presentActionSheet() {
+  presentActionSheet(item?) {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Select Image Source',
       buttons: [
         {
           text: 'Select from Album',
           handler: () => {
-            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY, item);
           }
         },
         {
           text: 'Use Camera',
           handler: () => {
-            this.takePicture(this.camera.PictureSourceType.CAMERA);
+            this.takePicture(this.camera.PictureSourceType.CAMERA, item);
           }
         },
         {
           text: 'Dummy',
           handler: () => {
             //this.takePicture(this.camera.PictureSourceType.CAMERA);
-            this.selectedCategory.record.addItem({ notes: '', photo: 'assets/images/doctor.png' });
+            if (!item)
+            {
+                this.selectedCategory.record.addItem({ notes: '', photo: 'assets/images/doctor.png' });
+            }
+            else
+            {
+                this.selectedCategory.record.addPhotoToItem('assets/images/doctor.png',item);
+            }
+            
           }
         },
 
@@ -127,16 +135,20 @@ toggleSettingsCards() {
 
   }
  
+ addPhotoToItem(item): void {
+   //this.selectedCategory.record.addPhotoToItem(photo,item)
+   this.presentActionSheet(item);
+ }
 
 
-  removeItem(item): void {
+  removeItem(item, removeFile=true): void {
     console.log ("Calling model remove");
-   this.selectedCategory.record.removeItem(item)
+   this.selectedCategory.record.removeItem(item, removeFile)
    .then (success => {
      //this.commonUtils.presentToast('success deleting');
    }, 
    error => {
-     this.commonUtils.presentToast('error deleting image','error');
+     //this.commonUtils.presentToast('error deleting image','error');
    });
   }
 
@@ -173,7 +185,7 @@ toggleSettingsCards() {
             if (cat) {
               console.log ("MOVING to "+cat);
               cat.record.addItem({notes:item.notes, photo:item.photo, date:item.date});
-              this.removeItem(item);
+              this.removeItem(item, false);
 
             }
 
@@ -238,9 +250,14 @@ toggleSettingsCards() {
       message: 'Record attached, image taken on ' +
       item.date + '\n\nNotes:\n' + item.notes,
       subject: 'MedFolio Image',
-      files: [item.photo], //the paramater
+      files: [], //the paramater
       chooserTitle: 'Share via...'
     };
+
+    for (let i=0; i< item.photo.length; i++)
+    {
+      options.files.push(this.getFullPath(item.photo[i]));
+    }
 
     this.socialSharing.shareWithOptions(options).then(() => {
       // Success!
@@ -253,19 +270,14 @@ toggleSettingsCards() {
 
 
    // Copy the image to a local folder
-   copyFileToLocalDir(namePath, currentName, newFileName) {
+   copyFileToLocalDir(namePath, currentName, newFileName): Promise <any> {
     console.log ("*** persistent "+this.file.dataDirectory);
-    this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-      //this.lastImage = newFileName;
-      console.log('Save to:' +  newFileName);
-      this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
-    }, error => {
-      this.commonUtils.presentToast('Error while storing file.');
-    });
+    return this.file.copyFile(namePath, currentName,  this.file.dataDirectory, newFileName);
+    
   }
 
- takePicture(sourceType) {
-    // Create options for the Camera Dialog
+ takePicture(sourceType, item?) {
+    // if item provided then we add a photo to it
     var options = {
       quality: 70,
       sourceType: sourceType,
@@ -275,15 +287,36 @@ toggleSettingsCards() {
     };
 
     // Get the data of an image
+    let newFileName = this.commonUtils.createFileName();
     this.camera.getPicture(options).then((imagePath) => {
       // Special handling for Android library
 
       this.crop.crop(imagePath).then ((croppedPath) => {
-        this.savePhoto(croppedPath, sourceType);
+        this.savePhoto(newFileName, croppedPath, sourceType).then (success=>{
+          if (!item) {
+            this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
+          }
+          else {
+            this.selectedCategory.record.addPhotoToItem(newFileName,item);
+          }
+        }, 
+          error=>{
+            this.commonUtils.presentToast('error adding image','error');
+          });
       },
       (whatever) => {
         console.log ("Ignoring crop");
-        this.savePhoto(imagePath, sourceType);
+        this.savePhoto(newFileName, imagePath, sourceType).then (success=>{
+          if (!item) {
+            this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
+          }
+          else {
+            this.selectedCategory.record.addPhotoToItem(newFileName,item);
+          }
+        }, 
+          error=>{
+            this.commonUtils.presentToast('error adding image','error');
+          });
       }
       );
       //this.savePhoto(imagePath, sourceType);
@@ -295,24 +328,24 @@ toggleSettingsCards() {
     });
   }
 
-  savePhoto(imagePath,sourceType):Promise <any>  {
-    return  new Promise ((resolve, reject ) => {
-      let newFileName = this.commonUtils.createFileName();
+  savePhoto(newFileName, imagePath,sourceType):Promise <any>  {
+  
+      
       if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
         this.filePath.resolveNativePath(imagePath)
           .then(filePath => {
             let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
             let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-            this.copyFileToLocalDir(correctPath, currentName, newFileName);
-            resolve();
+            return this.copyFileToLocalDir(correctPath, currentName, newFileName);
+           
           });
       } else {
         var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-        this.copyFileToLocalDir(correctPath, currentName, newFileName);
-        resolve();
+        return this.copyFileToLocalDir(correctPath, currentName, newFileName);
+       
       }
-    });
+
   }
 
   ionViewDidLoad() {

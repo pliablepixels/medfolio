@@ -5,7 +5,7 @@
       </ion-title>
       <ion-buttons end>
 
-            <button ion-button icon-only (click)="toggleSettingsCards()" *ngIf="viewMode=='cards'">
+            <button ion-button icon-only (click)="toggleSettingsCards()" *ngIf="viewMode=='cards' && selectedCategory.record.items.length">
             <ion-icon name="cog"></ion-icon>
          </button>
       
@@ -45,7 +45,7 @@ icon to add.
             <ion-item-sliding *ngFor="let item of selectedCategory.record.items | SearchPipe:term; let i=index">
                <ion-item>
                   <ion-thumbnail item-start>
-                     <img src="{{getFullPath(item.photo)}}" class="fit-thumbnail" #myImage (click)="presentImage(myImage)" tappable/>
+                     <img src="{{getFullPath(item.photo[0])}}" class="fit-thumbnail" #myImage (click)="presentImage(myImage)" tappable/>
                   </ion-thumbnail>
                   <p>{{item.notes}}</p>
                   <button ion-button icon-start clear item-end (click)="socialShare(item)">
@@ -85,11 +85,15 @@ icon to add.
                               <ion-fab-list side="left">
                                     <button ion-fab mini color="secondary" (click)="moveItem(item)"><ion-icon name="share-alt"></ion-icon></button>
                               </ion-fab-list>
+                              <ion-fab-list side="right">
+                                    <button ion-fab mini color="secondary" (click)="addPhotoToItem(item)"><ion-icon name="camera"></ion-icon></button>
+                              </ion-fab-list>
+
                         </ion-fab>
                      <ion-item>
                         <p>{{item.date}}</p>
                      </ion-item>
-                     <img src="{{getFullPath(item.photo)}}" #myImage (click)="presentImage(myImage)" class="card-image" tappable/>
+                     <img src="{{getFullPath(item.photo[0])}}" #myImage (click)="presentImage(myImage)" class="card-image" tappable/>
                      <ion-card-content *ngIf="item.notes">
                         <p>{{item.notes}}</p>
                      </ion-card-content>

@@ -18,6 +18,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
 //import { SearchPipe } from '../pipes/search/search';
+//import { TooltipsModule } from 'ionic-tooltips';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    IonicImageViewerModule
+    IonicImageViewerModule,
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [

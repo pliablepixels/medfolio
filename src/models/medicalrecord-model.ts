@@ -17,24 +17,51 @@ export class MedicalRecordModel {
 
     // add a new item to a specific category
     addItem(obj):void {
-        this.items.unshift({
+        
+        let item = {
             notes:obj.notes,
-            photo:obj.photo,
+            photo:[],
             date:obj.date || moment().format("MMM Do YYYY, h:mm:ss a"),
-            checked:false
-        });
+        };
+        item.photo.push(obj.photo);
+        this.items.unshift(item);
         this.medicalRecordObserver.next(true);
 
     }
 
+    addPhotoToItem (photo, item):void
+    {
+        item.photo.push(photo);
+        this.medicalRecordObserver.next(true);
+        console.log ("ITEM PHOTO ADDED " + JSON.stringify(item));
+
+    }
+
+
+
     // remove an new item from a specific category
-    removeItem(item){
+    removeItem(item, removeFile:boolean = true){
         let file = new File;
         console.log ("inside item delete with "+file.dataDirectory);
         let index = this.items.indexOf(item);
         if (index >-1) {this.items.splice(index,1);}
         // Let's also remmber to remove the associated photo
-        return file.removeFile (file.dataDirectory, item.photo);
+        this.medicalRecordObserver.next(true);
+        if (removeFile)
+        {
+            for (let i=0; i<item.photo.length; i++) {
+                file.removeFile (file.dataDirectory, item.photo[i]);
+            }
+
+            return Promise.resolve(); 
+
+        }
+        else
+        {
+            console.log ("Not removing file...");
+            return Promise.resolve();
+        }
+        
 
 
 
