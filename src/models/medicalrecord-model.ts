@@ -2,10 +2,11 @@ import {Observable} from 'rxjs/Observable';
 import * as moment from 'moment';
 import { File } from '@ionic-native/file';
 
+// reflects one 'record' in a category.
+
 export class MedicalRecordModel {
     medicalRecord:any;
     medicalRecordObserver:any;
-   
     constructor (public items: any[]){
         
         this.items = items;
@@ -29,6 +30,7 @@ export class MedicalRecordModel {
 
     }
 
+    // add a new photo to a specified item
     addPhotoToItem (photo, item):void
     {
         item.photo.push(photo);
@@ -37,9 +39,11 @@ export class MedicalRecordModel {
 
     }
 
-
-
     // remove an new item from a specific category
+    // this is also called for file move in which
+    // case only the item index needs to be removed
+    // but not the actual file, which is why removeFile
+    // exists
     removeItem(item, removeFile:boolean = true){
         let file = new File;
         console.log ("inside item delete with "+file.dataDirectory);

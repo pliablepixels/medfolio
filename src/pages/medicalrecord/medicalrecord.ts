@@ -1,5 +1,5 @@
 import { Component} from '@angular/core';
-import { IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
+import { ModalController, IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
@@ -7,6 +7,9 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { Crop } from '@ionic-native/crop'
 import { ImageViewerController } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
+//import { GalleryModal } from 'ionic-gallery-modal';
+//import { ZoomableImage } from 'ionic-gallery-modal';
+//import {ItemViewPage} from '../item-view/item-view';
 
 
 //declare var cordova: any;
@@ -30,13 +33,7 @@ export class MedicalRecordPage {
   cardSettings:boolean = false;
   categories:any;
 
-
-
-   _imageViewerCtrl: ImageViewerController;
-
-  //photoTaken:false;
-
-  constructor(public nav: NavController, public navParams: NavParams, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, private socialSharing: SocialSharing, imageViewerCtrl: ImageViewerController, private commonUtils:CommonUtilsProvider, private camera:Camera, private file:File, private filePath:FilePath, private crop:Crop) {
+  constructor( public modal: ModalController,  public nav: NavController,  public navParams: NavParams,  public alertCtrl: AlertController,  public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, public socialSharing: SocialSharing, public imageViewerCtrl: ImageViewerController, public commonUtils:CommonUtilsProvider, public camera:Camera, public file:File, public filePath:FilePath, public crop:Crop) {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
@@ -48,8 +45,11 @@ export class MedicalRecordPage {
     }
   
     this.viewMode = 'cards';
-    this._imageViewerCtrl = imageViewerCtrl;
-  }
+     }
+
+isMultiplePhotos(item) {
+  return item.photo.length > 1;
+}
 
 toggleSettingsCards() {
   this.cardSettings = !this.cardSettings;
@@ -63,9 +63,23 @@ toggleSettingsCards() {
     this.term = ev.target.value;
   }
 
+  presentModal (item) {
+    //console.log ("SENDING ITEM="+JSON.stringify(item));
+    let im = this.modal.create("ItemViewPage",{"item":item});
+    im.present();
+
+    /*let modal = this.modal.create("GalleryModal", {
+  photos: item.photo,
+  initialSlide: 0
+});
+modal.present();*/
+
+  }
+
+  // not currenty used
   presentImage (myImage) {
     console.log ("PresentImage with "+myImage);
-    const imageViewer = this._imageViewerCtrl.create(myImage);
+    const imageViewer = this.imageViewerCtrl.create(myImage);
     imageViewer.present();
   }
 

@@ -8,10 +8,13 @@ import { ToastController } from 'ionic-angular';
 
 @Injectable()
 export class CommonUtilsProvider {
-  constructor(private toastCtrl: ToastController, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath) {
+  constructor(public toastCtrl: ToastController, public camera: Camera, public transfer: Transfer, public file: File, public filePath: FilePath) {
     console.log('Hello CommonUtilsProvider Provider');
   }
 
+  // wrapper to present a toast with different colors
+  // error = red
+  // any other val = green
   presentToast(text, type?, dur?) {
 
     var cssClass = 'successToast';
@@ -35,6 +38,8 @@ export class CommonUtilsProvider {
     return newFileName;
   }
 
+  // converts image name to full path name+image so we
+  // can render it
   getFullPath(img) {
     if (img === null) {
       return '';

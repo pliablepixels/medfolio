@@ -20,7 +20,7 @@ export class CategoryPage {
   categories: { title: string, record: MedicalRecordModel }[] = [];
  
 
-  constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard, private commonUtils:CommonUtilsProvider) {
+  constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard, public commonUtils:CommonUtilsProvider) {
     console.log("CategoryPage constructor");
   }
 

@@ -45,9 +45,12 @@ icon to add.
             <ion-item-sliding *ngFor="let item of selectedCategory.record.items | SearchPipe:term; let i=index">
                <ion-item>
                   <ion-thumbnail item-start>
-                     <img src="{{getFullPath(item.photo[0])}}" class="fit-thumbnail" #myImage (click)="presentImage(myImage)" tappable/>
+                    <!-- <img src="{{getFullPath(item.photo[0])}}" class="fit-thumbnail" #myImage (click)="presentImage(myImage)" tappable/>-->
+
+                       <img src="{{getFullPath(item.photo[0])}}" class="fit-thumbnail" #myImage (click)="presentModal(item)" tappable/>
+
                   </ion-thumbnail>
-                  <p>{{item.notes}}</p>
+                  <p><ion-icon name="images" *ngIf="item.photo.length > 1">&nbsp;</ion-icon>{{item.notes}}</p>
                   <button ion-button icon-start clear item-end (click)="socialShare(item)">
                      <ion-icon name="share"></ion-icon>
                      share
@@ -91,9 +94,14 @@ icon to add.
 
                         </ion-fab>
                      <ion-item>
-                        <p>{{item.date}}</p>
+                        <p><ion-icon name="images" *ngIf="item.photo.length > 1">&nbsp;</ion-icon>{{item.date}}</p>
                      </ion-item>
-                     <img src="{{getFullPath(item.photo[0])}}" #myImage (click)="presentImage(myImage)" class="card-image" tappable/>
+                     <!--<img src="{{getFullPath(item.photo[0])}}" #myImage (click)="presentImage(myImage)" class="card-image" tappable/>-->
+
+                     <img src="{{getFullPath(item.photo[0])}}" #myImage (click)="presentModal(item)" class="card-image" tappable/>
+
+                     
+
                      <ion-card-content *ngIf="item.notes">
                         <p>{{item.notes}}</p>
                      </ion-card-content>
