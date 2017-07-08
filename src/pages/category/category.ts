@@ -28,6 +28,7 @@ export class CategoryPage {
     console.log("Inside viewload in homepage");
 
     this.platform.ready().then(() => {
+      console.log(this.platform.platforms());
       // load data from DB
       this.dataService.getData().then((categories) => {
         let savedCategories: any = false;

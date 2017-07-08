@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { Keyboard } from '@ionic-native/keyboard';
-import {Diagnostic} from '@ionic-native/diagnostic';
+//import {Diagnostic} from '@ionic-native/diagnostic';
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
@@ -17,6 +17,7 @@ import { DataProvider } from '../providers/data/data';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 
 @NgModule({
@@ -52,7 +53,7 @@ import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
     //Storage,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CommonUtilsProvider,
-    Diagnostic
+    AndroidPermissions,
   ]
 })
 export class AppModule {}

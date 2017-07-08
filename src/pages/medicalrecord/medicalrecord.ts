@@ -7,6 +7,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { Crop } from '@ionic-native/crop'
 import { ImageViewerController } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 //import { GalleryModal } from 'ionic-gallery-modal';
 //import { ZoomableImage } from 'ionic-gallery-modal';
 //import {ItemViewPage} from '../item-view/item-view';
@@ -33,7 +34,7 @@ export class MedicalRecordPage {
   cardSettings:boolean = false;
   categories:any;
 
-  constructor( public modal: ModalController,  public nav: NavController,  public navParams: NavParams,  public alertCtrl: AlertController,  public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, public socialSharing: SocialSharing, public imageViewerCtrl: ImageViewerController, public commonUtils:CommonUtilsProvider, public camera:Camera, public file:File, public filePath:FilePath, public crop:Crop) {
+  constructor( public modal: ModalController,  public nav: NavController,  public navParams: NavParams,  public alertCtrl: AlertController,  public actionSheetCtrl: ActionSheetController, public platform: Platform, public loadingCtrl: LoadingController, public socialSharing: SocialSharing, public imageViewerCtrl: ImageViewerController, public commonUtils:CommonUtilsProvider, public camera:Camera, public file:File, public filePath:FilePath, public crop:Crop, public androidPermissions: AndroidPermissions) {
 
     console.log("medicalrecord page constructor");
     this.selectedCategory = this.navParams.get('category');
@@ -144,8 +145,18 @@ modal.present();*/
   }
 
   addItem(): void {
+
+
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
+  success => { 
+    console.log('Permission granted,taking picture');
     this.presentActionSheet();
-    console.log("Taking picture");
+  },
+  err => {
+    this.androidPermissions.requestPermissions(this.androidPermissions.PERMISSION.CAMERA).then (success => {this.presentActionSheet();}, err => {this.commonUtils.presentToast("Please grant camera permission","error");});
+  }
+);
+  
 
   }
  
@@ -285,7 +296,7 @@ modal.present();*/
 
    // Copy the image to a local folder
    copyFileToLocalDir(namePath, currentName, newFileName): Promise <any> {
-    console.log ("*** persistent "+this.file.dataDirectory);
+    console.log ("inside copyFileToLocal Dir *** persistent "+this.file.dataDirectory);
     return this.file.copyFile(namePath, currentName,  this.file.dataDirectory, newFileName);
     
   }
@@ -304,8 +315,14 @@ modal.present();*/
     let newFileName = this.commonUtils.createFileName();
     this.camera.getPicture(options).then((imagePath) => {
       // Special handling for Android library
-
+      console.log ("---->getPicture returned "+imagePath);
       this.crop.crop(imagePath).then ((croppedPath) => {
+        // REMOVE
+        //croppedPath = imagePath;
+        if (croppedPath.indexOf('?') > -1) {
+          croppedPath = croppedPath.slice(0,croppedPath.indexOf('?'));
+        }
+         console.log ("---->croppedPath returned "+croppedPath);
         this.savePhoto(newFileName, croppedPath, sourceType).then (success=>{
           if (!item) {
             this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
@@ -316,6 +333,7 @@ modal.present();*/
         }, 
           error=>{
             this.commonUtils.presentToast('error adding image','error');
+            console.log (JSON.stringify(error));
           });
       },
       (whatever) => {
@@ -344,18 +362,23 @@ modal.present();*/
 
   savePhoto(newFileName, imagePath,sourceType):Promise <any>  {
   
+    console.log ("--->savePhoto newFileName="+newFileName+" imagePath="+imagePath);
       
-      if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+      if (0 && this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
         this.filePath.resolveNativePath(imagePath)
           .then(filePath => {
             let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
             let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+
+            console.log ("Android: copying "+newFileName+" to "+correctPath+currentName);
+             console.log ("album calling copyFileToLocalDir with newFileName:"+newFileName+"  correctPath+currentName="+correctPath+currentName);
             return this.copyFileToLocalDir(correctPath, currentName, newFileName);
            
           });
       } else {
         var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+        console.log ("calling copyFileToLocalDir with newFileName:"+newFileName+"  correctPath+currentName="+correctPath+currentName);
         return this.copyFileToLocalDir(correctPath, currentName, newFileName);
        
       }
