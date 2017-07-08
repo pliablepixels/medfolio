@@ -3,11 +3,22 @@
   <ion-fab top right >
     <button ion-fab mini color="secondary" (click)="removeModal()"><ion-icon name="close" ></ion-icon></button>
   </ion-fab>
-
-
-  <ion-slides [pager]='true' [zoom]='true'>
+    <ion-slides [pager]='true' [zoom]='true'>
+    
     <ion-slide *ngFor="let photo of item.photo">
-      <div class="swiper-zoom-container"><img src={{getFullPath(photo)}} /></div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+          <div class="swiper-zoom-container"><img src={{getFullPath(photo)}} /></div>
+          </ion-col>
+        </ion-row>
+  
+        <ion-row *ngIf="item.notes">
+           <ion-col><span class="small">{{item.notes}}</span></ion-col>
+        </ion-row>
+    </ion-grid>
     </ion-slide>
+   
   </ion-slides>
 </ion-content>

@@ -144,8 +144,12 @@ modal.present();*/
 
   }
 
-  addItem(): void {
+  addItem() {
 
+    if (this.platform.is('core')) {
+       this.presentActionSheet();
+       return;
+    }
 
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
   success => { 
@@ -286,7 +290,7 @@ modal.present();*/
 
     this.socialSharing.shareWithOptions(options).then(() => {
       // Success!
-      this.commonUtils.presentToast('Success sharing');
+      //this.commonUtils.presentToast('Success sharing');
     }).catch(() => {
       this.commonUtils.presentToast('Error while sharing image.', 'error');
     });

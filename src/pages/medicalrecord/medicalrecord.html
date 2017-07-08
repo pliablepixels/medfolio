@@ -93,18 +93,18 @@ icon to add.
                               </ion-fab-list>
 
                         </ion-fab>
-                     <ion-item>
-                        <p><ion-icon name="images" *ngIf="item.photo.length > 1">&nbsp;</ion-icon>{{item.date}}</p>
-                     </ion-item>
+                     <div padding-left>
+                        <ion-icon name="images" *ngIf="item.photo.length > 1">&nbsp;</ion-icon><span text-nowrap class="small">{{item.date}}</span>
+                     </div>
                      <!--<img src="{{getFullPath(item.photo[0])}}" #myImage (click)="presentImage(myImage)" class="card-image" tappable/>-->
 
                      <img src="{{getFullPath(item.photo[0])}}" #myImage (click)="presentModal(item)" class="card-image" tappable/>
 
                      
 
-                     <ion-card-content *ngIf="item.notes">
-                        <p>{{item.notes}}</p>
-                     </ion-card-content>
+                     <div padding-left *ngIf="item.notes">
+                        <span text-wrap class="small">{{item.notes}}</span>
+                     </div>
                      <ion-row>
                         <ion-col>
                            <button ion-button icon-left clear small (click)="socialShare(item)">

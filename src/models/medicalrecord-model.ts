@@ -22,7 +22,7 @@ export class MedicalRecordModel {
         let item = {
             notes:obj.notes,
             photo:[],
-            date:obj.date || moment().format("MMM Do YYYY, h:mm:ss a"),
+            date:obj.date || moment().format("MMM Do, h:mm a"),
         };
         item.photo.push(obj.photo);
         this.items.unshift(item);
