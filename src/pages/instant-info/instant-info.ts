@@ -34,6 +34,7 @@ export class InstantInfoPage {
         else
         {
           console.log ("Instant info NOT found");
+          this.readonly = false;
         }
     });
 
