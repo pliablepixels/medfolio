@@ -11,6 +11,15 @@ export class DataProvider {
     console.log(' DataProvider Provider constructor');
   }
 
+  getInstantInfo(): Promise <any> {
+    return this.storage.get('instantInfo');
+  }
+
+  saveInstantInfo(instant): Promise <any> {
+    let strData = JSON.stringify(instant);
+    console.log("--->Saving: " + strData);
+    return this.storage.set('instantInfo', strData);
+  }
 
   getData(): Promise<any> {
     return this.storage.get('categories');

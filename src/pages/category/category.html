@@ -1,8 +1,17 @@
 <ion-header>
   <ion-navbar color="primary">
+
+    <ion-buttons left>
+      <button ion-button icon-only (click)="instantInfo()" >
+        <ion-icon name="contact"></ion-icon>
+      </button>
+    </ion-buttons>
+
+
     <ion-title>
       Categories
     </ion-title>
+
     <ion-buttons end>
       <button ion-button icon-only (click)="addCategory()" >
         <ion-icon name="add-circle"></ion-icon>

@@ -55,7 +55,7 @@ export class CategoryPage {
         else {
           console.log("No categories saved, creating...");
           this.dataService.setIntroShown(false);
-          var defaultCategories = ["X-Rays", "Medical reports", "Lab Results"];
+          var defaultCategories = ["X-Rays", "Medical reports", "Lab Results", "EKG"];
           for (let label of defaultCategories) {
             let newMedicalRecord = new MedicalRecordModel([]);
             this.categories.push({ title: label, record: newMedicalRecord });
@@ -164,6 +164,12 @@ export class CategoryPage {
       ]
     });
     prompt.present().then(() => { this.list.closeSlidingItems(); });
+  }
+
+
+  instantInfo(): void {
+    console.log("pushing instant view to nav");
+    this.navCtrl.push('InstantInfoPage');
   }
 
   // show records within a category

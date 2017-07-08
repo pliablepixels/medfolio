@@ -1,0 +1,48 @@
+<!--
+  Generated template for the InstantInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Instant Info</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="toggleReadonly()" >
+        <ion-icon [name]="readonly? 'create':'done-all'"></ion-icon>
+      </button>
+    </ion-buttons>
+
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+ <ion-list-header>
+	    <ion-icon name="contact" item-left></ion-icon>
+	     <h2 style="display: inline-block;">Keep a record of important information here</h2>
+	</ion-list-header>
+  <ion-list>
+
+    <ion-item>
+      <ion-label color="primary" stacked>Primary Physician</ion-label>
+      <ion-textarea [(ngModel)]="instantInfo.doctor"  placeholder="Physician name, address, etc." [readonly]=readonly></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" stacked>Allergies </ion-label>
+      <ion-textarea [(ngModel)]="instantInfo.allergies" placeholder="Make a note of your allergies" [readonly]=readonly></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" stacked>Emergency Contact</ion-label>
+      <ion-textarea [(ngModel)]="instantInfo.emergency" placeholder="Someone you trust" [readonly]=readonly></ion-textarea>
+    </ion-item>
+
+
+  </ion-list>
+</ion-content>
