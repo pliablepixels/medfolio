@@ -18,6 +18,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { MaterialIconsModule } from 'ionic2-material-icons';
+
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     IonicImageViewerModule,
+    MaterialIconsModule
 
   ],
   bootstrap: [IonicApp],

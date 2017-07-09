@@ -8,6 +8,7 @@ import { Crop } from '@ionic-native/crop'
 import { ImageViewerController } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+
 //import { GalleryModal } from 'ionic-gallery-modal';
 //import { ZoomableImage } from 'ionic-gallery-modal';
 //import {ItemViewPage} from '../item-view/item-view';
@@ -100,6 +101,17 @@ modal.present();*/
             this.takePicture(this.camera.PictureSourceType.CAMERA, item);
           }
         },
+
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    // add a dummy local asset so I can test on desktop
+    if (this.platform.is('core')) {
+      actionSheet.addButton(
         {
           text: 'Dummy',
           handler: () => {
@@ -114,14 +126,11 @@ modal.present();*/
             }
             
           }
-        },
-
-        {
-          text: 'Cancel',
-          role: 'cancel'
         }
-      ]
-    });
+      );
+    }
+
+
     actionSheet.present();
   }
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams , ViewController} from 'ionic-angular';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 
+
 /**
  * Generated class for the ItemViewPage page.
  *

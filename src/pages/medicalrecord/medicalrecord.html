@@ -19,6 +19,9 @@
    </ion-navbar>
 </ion-header>
 <ion-content>
+      <ion-icon md-name="settings"></ion-icon> Hello Will I See a Material Icon?
+      <br/>
+       <i class="fa fa-book" aria-hidden="true"></i>I can see Font Awesome
 <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="searchFn($event)" *ngIf="searchEnabled"></ion-searchbar>
 <ion-item *ngIf="!selectedCategory.record.items.length" (click)="addItem()" tappable>
 No records. Tap the
@@ -62,7 +65,7 @@ icon to add.
                </ion-item>
                <ion-item-options>
                   <button ion-button icon-only color="light" (click)="moveItem(item)">
-                     <ion-icon name="share-alt"></ion-icon>
+                     <i class="fa fa-exchange"></i>
                      Move&nbsp;
                   </button>
                   <button ion-button icon-only color="danger" (click)="removeItem(item)">
@@ -73,10 +76,12 @@ icon to add.
             </ion-item-sliding>
          </ion-list>
       </div>
-
+    
       <!-- CARD VIEW -->
       <div *ngSwitchCase="'cards'">
+            
          <ion-grid>
+                 
             <ion-row wrap>
                <ion-col col-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let item of selectedCategory.record.items | SearchPipe:term; let isEven=even">
                   <ion-card>
@@ -86,7 +91,7 @@ icon to add.
                                     <button ion-fab mini color="secondary" (click)="removeItem(item)"><ion-icon name="trash"></ion-icon></button>
                               </ion-fab-list>
                               <ion-fab-list side="left">
-                                    <button ion-fab mini color="secondary" (click)="moveItem(item)"><ion-icon name="share-alt"></ion-icon></button>
+                                    <button ion-fab mini color="secondary" (click)="moveItem(item)"><i class="fa fa-exchange"></i></button>
                               </ion-fab-list>
                               <ion-fab-list side="right">
                                     <button ion-fab mini color="secondary" (click)="addPhotoToItem(item)"><ion-icon name="camera"></ion-icon></button>

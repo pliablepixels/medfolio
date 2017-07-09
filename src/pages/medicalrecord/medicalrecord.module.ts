@@ -4,7 +4,7 @@ import { MedicalRecordPage } from './medicalrecord';
 import {Pipes} from "../../pipes/pipes"
 //import { GalleryModal } from 'ionic-gallery-modal';
 //import { ZoomableImage } from 'ionic-gallery-modal';
-
+import { MaterialIconsModule } from 'ionic2-material-icons';
 
 @NgModule({
   declarations: [
@@ -19,6 +19,7 @@ import {Pipes} from "../../pipes/pipes"
   imports: [
     IonicPageModule.forChild(MedicalRecordPage),
     Pipes,
+    MaterialIconsModule,
     
   ],
   exports: [
