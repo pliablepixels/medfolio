@@ -4,12 +4,31 @@ import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
-import { ToastController } from 'ionic-angular';
+import { ToastController, LoadingController } from 'ionic-angular';
 
 @Injectable()
 export class CommonUtilsProvider {
-  constructor(public toastCtrl: ToastController, public camera: Camera, public transfer: Transfer, public file: File, public filePath: FilePath) {
+
+  loader:any;
+
+  constructor(public toastCtrl: ToastController, public camera: Camera, public transfer: Transfer, public file: File, public filePath: FilePath, public loadingCtrl: LoadingController) {
     console.log('Hello CommonUtilsProvider Provider');
+    //this.loader = loadingCtrl.create();
+  }
+
+  // pass -1 to dur for infinite
+  presentLoader(text, dur=6000) {
+
+    if (this.loader) {this.loader.dismiss();}
+    this.loader = this.loadingCtrl.create ({
+      content:text,
+      duration:dur
+    });
+    this.loader.present();
+  }
+
+  removerLoader() {
+    if (this.loader) {this.loader.dismiss();}
   }
 
   // wrapper to present a toast with different colors

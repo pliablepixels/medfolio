@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, AlertController, Platform } from 'ionic-angular';
 import { MedicalRecordModel } from '../../models/medicalrecord-model';
 import { DataProvider } from '../../providers/data/data';
-//import {IntroPage} from '../intro/intro';
 import { Keyboard } from '@ionic-native/keyboard';
 import { List } from 'ionic-angular';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
@@ -24,11 +23,14 @@ export class CategoryPage {
     console.log("CategoryPage constructor");
   }
 
+    
+
   ionViewDidLoad() {
     console.log("Inside viewload in homepage");
 
     this.platform.ready().then(() => {
       console.log(this.platform.platforms());
+  
       // load data from DB
       this.dataService.getData().then((categories) => {
         let savedCategories: any = false;

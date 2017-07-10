@@ -19,6 +19,7 @@ import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../providers/common-utils/common-utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { MaterialIconsModule } from 'ionic2-material-icons';
+import { ElasticModule } from 'ng-elastic';
 
 
 
@@ -33,7 +34,8 @@ import { MaterialIconsModule } from 'ionic2-material-icons';
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     IonicImageViewerModule,
-    MaterialIconsModule
+    MaterialIconsModule,
+    ElasticModule
 
   ],
   bootstrap: [IonicApp],

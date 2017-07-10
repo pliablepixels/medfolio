@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, ViewChild, ElementRef} from '@angular/core';
 import { ModalController, IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
@@ -9,10 +9,6 @@ import { ImageViewerController } from 'ionic-img-viewer';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 
-//import { GalleryModal } from 'ionic-gallery-modal';
-//import { ZoomableImage } from 'ionic-gallery-modal';
-//import {ItemViewPage} from '../item-view/item-view';
-
 
 //declare var cordova: any;
 
@@ -21,7 +17,6 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
   selector: 'page-medicalrecord',
   templateUrl: 'medicalrecord.html',
   
-
 })
 export class MedicalRecordPage {
   selectedCategory: any;
@@ -154,8 +149,7 @@ modal.present();*/
   }
 
   addItem() {
-
-    if (this.platform.is('core')) {
+       if (this.platform.is('core')) {
        this.presentActionSheet();
        return;
     }
@@ -336,22 +330,27 @@ modal.present();*/
           croppedPath = croppedPath.slice(0,croppedPath.indexOf('?'));
         }
          console.log ("---->croppedPath returned "+croppedPath);
+        this.commonUtils.presentLoader('saving...');
         this.savePhoto(newFileName, croppedPath, sourceType).then (success=>{
           if (!item) {
             this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
+            this.commonUtils.removerLoader();
           }
           else {
             this.selectedCategory.record.addPhotoToItem(newFileName,item);
           }
         }, 
           error=>{
+            this.commonUtils.removerLoader();
             this.commonUtils.presentToast('error adding image','error');
             console.log (JSON.stringify(error));
           });
       },
       (whatever) => {
         console.log ("Ignoring crop");
+        this.commonUtils.presentLoader('saving...');
         this.savePhoto(newFileName, imagePath, sourceType).then (success=>{
+          this.commonUtils.removerLoader();
           if (!item) {
             this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
           }
@@ -360,6 +359,7 @@ modal.present();*/
           }
         }, 
           error=>{
+            this.commonUtils.removerLoader();
             this.commonUtils.presentToast('error adding image','error');
           });
       }
@@ -377,6 +377,7 @@ modal.present();*/
   
     console.log ("--->savePhoto newFileName="+newFileName+" imagePath="+imagePath);
       
+     
       if (0 && this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
         this.filePath.resolveNativePath(imagePath)
           .then(filePath => {
@@ -400,6 +401,12 @@ modal.present();*/
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MedicalRecordPage');
+    //this.commonUtils.presentLoader('random string '+Date());
   }
+
+
+  ngAfterViewInit() {
+    
+}
 
 }
