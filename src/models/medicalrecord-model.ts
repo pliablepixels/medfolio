@@ -24,7 +24,8 @@ export class MedicalRecordModel {
             photo: [],
             date: obj.date || moment().format("MMM Do, h:mm a"),
         };
-        item.photo.push(obj.photo);
+        //item.photo.push(obj.photo);
+        item.photo = obj.photo;
         this.items.unshift(item);
         this.medicalRecordObserver.next(true);
 

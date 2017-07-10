@@ -113,7 +113,7 @@ modal.present();*/
             //this.takePicture(this.camera.PictureSourceType.CAMERA);
             if (!item)
             {
-                this.selectedCategory.record.addItem({ notes: '', photo: 'assets/images/doctor.png' });
+                this.selectedCategory.record.addItem({ notes: '', photo: ['assets/images/doctor.png'] });
             }
             else
             {
@@ -216,6 +216,7 @@ modal.present();*/
             let cat = this.getCategory(data);
             if (cat) {
               console.log ("MOVING to "+cat);
+
               cat.record.addItem({notes:item.notes, photo:item.photo, date:item.date});
               this.removeItem(item, false);
 
@@ -333,11 +334,12 @@ modal.present();*/
         this.commonUtils.presentLoader('saving...');
         this.savePhoto(newFileName, croppedPath, sourceType).then (success=>{
           if (!item) {
-            this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
+            this.selectedCategory.record.addItem({ notes: '', photo: [newFileName] });
             this.commonUtils.removerLoader();
           }
           else {
             this.selectedCategory.record.addPhotoToItem(newFileName,item);
+            this.commonUtils.removerLoader();
           }
         }, 
           error=>{
@@ -352,7 +354,7 @@ modal.present();*/
         this.savePhoto(newFileName, imagePath, sourceType).then (success=>{
           this.commonUtils.removerLoader();
           if (!item) {
-            this.selectedCategory.record.addItem({ notes: '', photo: newFileName });
+            this.selectedCategory.record.addItem({ notes: '', photo: [newFileName] });
           }
           else {
             this.selectedCategory.record.addPhotoToItem(newFileName,item);
