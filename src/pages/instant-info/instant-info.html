@@ -30,17 +30,22 @@
 
     <ion-item>
       <ion-label color="primary" stacked>Primary Physician</ion-label>
-      <ion-textarea [(ngModel)]="instantInfo.doctor"  placeholder="Physician name, address, etc." [readonly]=readonly></ion-textarea>
+      <ion-textarea fz-elastic [(ngModel)]="instantInfo.doctor"  placeholder="Physician name, address, etc." [readonly]=readonly [ngClass]="readonly?'':'editmode'"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" stacked>Medication</ion-label>
+      <ion-textarea fz-elastic [(ngModel)]="instantInfo.medication" placeholder="Medication you are currently taking" [readonly]=readonly [ngClass]="readonly?'':'editmode'"></ion-textarea>
     </ion-item>
 
     <ion-item>
       <ion-label color="primary" stacked>Allergies </ion-label>
-      <ion-textarea [(ngModel)]="instantInfo.allergies" placeholder="Make a note of your allergies" [readonly]=readonly></ion-textarea>
+      <ion-textarea fz-elastic [(ngModel)]="instantInfo.allergies" placeholder="Make a note of your allergies" [readonly]=readonly [ngClass]="readonly?'':'editmode'"></ion-textarea>
     </ion-item>
 
     <ion-item>
       <ion-label color="primary" stacked>Emergency Contact</ion-label>
-      <ion-textarea [(ngModel)]="instantInfo.emergency" placeholder="Someone you trust" [readonly]=readonly></ion-textarea>
+      <ion-textarea fz-elastic [(ngModel)]="instantInfo.emergency" placeholder="Someone you trust" [readonly]=readonly [ngClass]="readonly?'':'editmode'"></ion-textarea>
     </ion-item>
 
 
