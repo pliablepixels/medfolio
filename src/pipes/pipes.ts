@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
-import {SearchPipe} from "./search/search";
+import {SearchRecordPipe} from "./search/search-record";
+import {SearchCategoryPipe} from "./search/search-category";
 
 
 
 @NgModule({
 	declarations: [
-		SearchPipe,
+		SearchRecordPipe,
+		SearchCategoryPipe,
 	],
 	imports: [
 
 	],
 	exports: [
-		SearchPipe,
+		SearchRecordPipe,
+		SearchCategoryPipe,
 	]
 })
 

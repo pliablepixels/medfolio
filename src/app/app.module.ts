@@ -35,7 +35,8 @@ import { ElasticModule } from 'ng-elastic';
     IonicStorageModule.forRoot(),
     IonicImageViewerModule,
     MaterialIconsModule,
-    ElasticModule
+    ElasticModule,
+  
 
   ],
   bootstrap: [IonicApp],

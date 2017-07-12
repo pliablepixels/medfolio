@@ -17,6 +17,8 @@ export class CategoryPage {
 
   @ViewChild(List) list: List; // needed to close sliding list
   categories: { title: string, record: MedicalRecordModel }[] = [];
+  term:string = '';
+  searchEnabled:boolean = false;
  
 
   constructor(public navCtrl: NavController, public dataService: DataProvider, public alertCtrl: AlertController, public platform: Platform, public keyboard: Keyboard, public commonUtils:CommonUtilsProvider) {
@@ -82,6 +84,14 @@ export class CategoryPage {
 
   }
 
+  searchFn(ev: any) {
+    //console.log ("SEARCHFN");
+    this.term = ev.target.value;
+  }
+  
+  toggleSearch(): void {
+    this.searchEnabled = !this.searchEnabled;
+  }
   
   // create new record category
   addCategory(): void {

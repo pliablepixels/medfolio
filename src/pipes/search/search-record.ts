@@ -7,11 +7,11 @@ import { Pipe, PipeTransform, Injectable } from '@angular/core';
  * Angular Pipes.
  */
 @Pipe({
-  name: 'SearchPipe',
+  name: 'SearchRecordPipe',
   pure:true
 })
 @Injectable()
-export class SearchPipe implements PipeTransform {
+export class SearchRecordPipe implements PipeTransform {
   
   transform(items:any[], param:string) {
     //console.log (" GOT PARAM="+param);
@@ -25,13 +25,9 @@ export class SearchPipe implements PipeTransform {
     else {
       return items;
     }
-    
-    /*for (let i=0; i< items.length; i++) {
-
-      console.log ("PIPE GOT: "+items[i].date);
-    }
-    
-    return items;*/
-
+   
   }
 }
+
+
+

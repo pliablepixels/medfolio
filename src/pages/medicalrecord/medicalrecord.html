@@ -46,7 +46,7 @@ icon to add.
 
       <div *ngSwitchCase="'list'">
          <ion-list nolines>
-            <ion-item-sliding *ngFor="let item of selectedCategory.record.items | SearchPipe:term; let i=index">
+            <ion-item-sliding *ngFor="let item of selectedCategory.record.items | SearchRecordPipe:term; let i=index">
                <ion-item>
                   <ion-thumbnail item-start>
                     <!-- <img src="{{getFullPath(item.photo[0])}}" class="fit-thumbnail" #myImage (click)="presentImage(myImage)" tappable/>-->
@@ -84,7 +84,7 @@ icon to add.
          <ion-grid>
                  
             <ion-row wrap>
-               <ion-col col-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let item of selectedCategory.record.items | SearchPipe:term; let isEven=even">
+               <ion-col col-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let item of selectedCategory.record.items | SearchRecordPipe:term; let isEven=even">
                   <ion-card>
                         <ion-fab center middle  *ngIf="cardSettings" #fab>
                               <button ion-fab mini color="danger"><ion-icon name="cog"></ion-icon></button>

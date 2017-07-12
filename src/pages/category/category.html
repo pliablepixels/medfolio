@@ -15,6 +15,10 @@
     </ion-title>
 
     <ion-buttons end>
+        <button ion-button icon-only (click)="toggleSearch()">
+            <ion-icon name="search"></ion-icon>
+         </button>
+
       <button ion-button icon-only (click)="addCategory()" >
         <ion-icon name="add-circle"></ion-icon>
       </button>
@@ -23,8 +27,10 @@
 </ion-header>
 
 <ion-content>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="searchFn($event)" *ngIf="searchEnabled"></ion-searchbar>
+
   <ion-list nolines >
-    <ion-item-sliding  #slidingItems *ngFor = "let category of categories">
+    <ion-item-sliding  #slidingItems *ngFor = "let category of categories | SearchCategoryPipe:term">
       
       <button ion-item (click)="viewCategory(category)" >
         <ion-icon name="folder-open" item-start></ion-icon>
