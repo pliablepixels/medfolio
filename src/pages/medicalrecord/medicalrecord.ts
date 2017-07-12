@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController, IonicPage, NavParams, AlertController, NavController, ActionSheetController, Platform, LoadingController, Loading } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';

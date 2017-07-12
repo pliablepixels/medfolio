@@ -7,7 +7,7 @@ import { List } from 'ionic-angular';
 import { CommonUtilsProvider } from '../../providers/common-utils/common-utils';
 
 
-type Category = { title: string, records: MedicalRecordModel };
+//type Category = { title: string, records: MedicalRecordModel };
 @IonicPage()
 @Component({
   selector: 'page-category',

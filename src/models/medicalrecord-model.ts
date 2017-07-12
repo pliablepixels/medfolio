@@ -44,7 +44,7 @@ export class MedicalRecordModel {
     // case only the item index needs to be removed
     // but not the actual file, which is why removeFile
     // exists
-    removeItem(item, removeFile: boolean = true) {
+    removeItem(item, removeFile: boolean = true): Promise <any> {
         let file = new File;
         console.log("inside item delete with " + file.dataDirectory);
         let index = this.items.indexOf(item);

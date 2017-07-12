@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Camera } from '@ionic-native/camera';
 //import {Crop} from 'ionic-native';
 import { File } from '@ionic-native/file';
-import { Transfer } from '@ionic-native/transfer';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { ToastController, LoadingController } from 'ionic-angular';
 
@@ -11,7 +11,7 @@ export class CommonUtilsProvider {
 
   loader:any;
 
-  constructor(public toastCtrl: ToastController, public camera: Camera, public transfer: Transfer, public file: File, public filePath: FilePath, public loadingCtrl: LoadingController) {
+  constructor(public toastCtrl: ToastController, public camera: Camera, public transfer: FileTransfer, public file: File, public filePath: FilePath, public loadingCtrl: LoadingController) {
     console.log('Hello CommonUtilsProvider Provider');
     //this.loader = loadingCtrl.create();
   }

@@ -7,7 +7,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Keyboard } from '@ionic-native/keyboard';
 //import {Diagnostic} from '@ionic-native/diagnostic';
 import { File } from '@ionic-native/file';
-import { Transfer } from '@ionic-native/transfer';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { Crop } from '@ionic-native/crop';
@@ -50,7 +50,7 @@ import { ElasticModule } from 'ng-elastic';
     DataProvider,
     Keyboard,
     File,
-    Transfer,
+    FileTransfer,
     Camera,
     Crop,
     FilePath,
