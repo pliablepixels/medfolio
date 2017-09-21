@@ -365,6 +365,7 @@ modal.present();*/
   ionViewDidLoad() {
     console.log('ionViewDidLoad MedicalRecordPage');
     //this.commonUtils.presentLoader('random string '+Date());
+    this.commonUtils.bumpNumber();
   }
 
 

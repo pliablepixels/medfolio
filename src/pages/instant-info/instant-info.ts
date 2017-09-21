@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
+import { CommonUtilsProvider } from '../../providers/common-utils/common-utils'; 
 
 
 @IonicPage()
@@ -13,7 +14,7 @@ export class InstantInfoPage {
   readonly:boolean = true;
   instantInfo = {doctor:"", allergies:"", medication:"", emergency:""};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public dataService:DataProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public dataService:DataProvider, public commonUtils:CommonUtilsProvider) {
   }
 
   toggleReadonly () {
@@ -35,6 +36,7 @@ export class InstantInfoPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad InstantInfoPage');
+    this.commonUtils.bumpNumber();
     this.dataService.getInstantInfo().then( (instant)=>{
         if (instant)
         {

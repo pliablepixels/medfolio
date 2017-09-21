@@ -23,3 +23,7 @@
     padding-right:8px;
 }
 
+
+body {
+    padding-top: constant(safe-area-inset-top);
+}

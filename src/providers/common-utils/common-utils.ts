@@ -10,12 +10,20 @@ import { ToastController, LoadingController } from 'ionic-angular';
 export class CommonUtilsProvider {
 
   loader:any;
+  dummy:number = 0;
 
   constructor(public toastCtrl: ToastController, public camera: Camera, public transfer: FileTransfer, public file: File, public filePath: FilePath, public loadingCtrl: LoadingController) {
     console.log('Hello CommonUtilsProvider Provider');
     //this.loader = loadingCtrl.create();
   }
 
+
+  bumpNumber(){
+    console.log ("******* DUMMY="+this.dummy);
+    this.dummy += 1;
+    console.log ("******* NEW DUMMY="+this.dummy);
+
+  }
   // pass -1 to dur for infinite
   presentLoader(text, dur=6000) {
 

@@ -29,6 +29,7 @@ export class CategoryPage {
 
   ionViewDidLoad() {
     console.log("Inside viewload in homepage");
+    this.commonUtils.bumpNumber();
 
     this.platform.ready().then(() => {
       console.log(this.platform.platforms());
@@ -59,7 +60,7 @@ export class CategoryPage {
         else {
           console.log("No categories saved, creating...");
           this.dataService.setIntroShown(false);
-          var defaultCategories = ["X-Rays", "Medical reports", "Lab Results", "EKG"];
+          var defaultCategories = ["X-Rays", "Medical reports", "Lab Results", "EKG", "Skin Rash", "Notes"];
           for (let label of defaultCategories) {
             let newMedicalRecord = new MedicalRecordModel([]);
             this.categories.push({ title: label, record: newMedicalRecord });
